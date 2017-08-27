@@ -21,11 +21,14 @@
    *
    */
 
-// SEPHARDIC
-  // make the sum of all languages be visible in the function
+  $any = LanguageCode("any", $languages);
+  $french = LanguageCode("french", $languages);
+  $hebrew = LanguageCode("hebrew", $languages);
+  $italian = LanguageCode("italian", $languages);
+  $portuguese = LanguageCode("portuguese", $languages);
+  $spanish = LanguageCode("spanish", $languages);
 
    $all = $italian+$spanish+$french+$portuguese+$hebrew;
-   $_GET['all'] = $all;
 
    $languageRules = array(
 
@@ -117,36 +120,5 @@
     array('/è/', $portuguese, false)
         
             );
-
-  function Language($name, $rules) {
-    // convert $name to utf8
-    $name = utf8_encode($name); // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
-    if (strpos($name, "&") !== false) { // takes care of ampersand-notation encoding of unicode (&#...;)
-      $name = html_entity_decode($name, ENT_NOQUOTES, "UTF-8");
-    }
-    return Language_UTF8($name, $rules);
-  }
-
-  function Language_UTF8($name, $rules) {
-//    $name = mb_strtolower($name, mb_detect_encoding($name));
-    $name = mb_strtolower($name, "UTF-8");
-    $all = $_GET['all'];
-    $choicesRemaining = $all;
-    for ($i=0; $i<count($rules); $i++) {
-      list($letters, $languages, $accept) = $rules[$i];
-//echo "testing letters=$letters languages=$languages accept=$accept<br>";
-      if (preg_match($letters, $name)) {
-        if ($accept) {
-          $choicesRemaining &= $languages;
-        } else { // reject
-          $choicesRemaining &= (~$languages) % ($all+1);
-        }
-      }
-    }
-    if ($choicesRemaining == 0) {
-      $choicesRemaining = 1;
-    }
-    return $choicesRemaining;
-  }
 
 ?> 

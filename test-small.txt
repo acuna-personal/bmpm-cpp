@@ -1,3 +1,4 @@
-telman	ashkenazi
-kazez	sephardic
-johnson	any
+telman	ash	polish
+kazez	sep	turkish
+johnson	any	english
+kazez	sep	any

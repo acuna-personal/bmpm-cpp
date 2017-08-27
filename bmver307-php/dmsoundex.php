@@ -21,6 +21,8 @@
    *
    */
 
+  namespace BMPM;
+
   function soundx_name($MyStrArg) {
 
     $GROUPSEPARATOR = " ";

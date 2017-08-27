@@ -21,6 +21,8 @@
    *
    */
 
+  namespace BMPM\Ashkenazi;
+
 //Ashkenazic
 include_once "exactapproxcommon.php";
 

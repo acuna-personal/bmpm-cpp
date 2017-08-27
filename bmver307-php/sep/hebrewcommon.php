@@ -21,6 +21,8 @@
    *
    */
 
+  namespace BMPM\Sephardic;
+
 //Sephardic
 include_once "exactapproxcommon.php";
 

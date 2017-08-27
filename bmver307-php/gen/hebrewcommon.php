@@ -21,6 +21,8 @@
    *
    */
 
+  namespace BMPM\Generic;
+
 //GENERAL
 include_once "exactapproxcommon.php";
 

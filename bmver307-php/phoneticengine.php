@@ -21,37 +21,25 @@
    *
    */
 
-  set_time_limit(0);
-
-  function Get($arg) { // to avoid index errors in jewishgen error log file
-    $rv = "";
-    if (array_key_exists($arg, $_GET)) {
-      $rv = $_GET[$arg];
-    }
-    return $rv;
-  }
-
    // 1 is language code for any
-  function Phonetic($input, $rules, $finalRules1, $finalRules2, $languageArg="1", $concat=false) {
+  function Phonetic($input, $rules, $finalRules1, $finalRules2, $languageArg="1", $concat=false, $type) {
 
     // convert $input to utf8
     $input = utf8_encode($input); // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
     if (strpos($input, "&") !== false) { // takes care of ampersand-notation encoding of unicode (&#...;)
       $input = html_entity_decode($input, ENT_NOQUOTES, "UTF-8");
     }
-    return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
+    return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat, $type);
   }
 
-  function RedoLanguage($input, $rules, $finalRules1, $finalRules2, $concat) {
+  function RedoLanguage($input, $rules, $finalRules1, $finalRules2, $concat, $languageRules) {
     // we can do a better job of determining the language now that multiple names have been split
-    global $languageRules;
     $languageArg = Language($input, $languageRules);
     return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
-  function Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false) {
-    $debug = false; // for running on jewishgen server
-$debug = Get('debug'); // for running on my server
+  function Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false, $type) {
+    $debug = false;
 
 if ($debug) echo "<hr>";
     $input = trim($input); // remove any leading or trailing white space
@@ -74,7 +62,6 @@ echo "]<br>";
 
     $ash = false; // ashkenazic
     $sep = false; // sephardic
-    $type = Get('type');
     if ($type == "ash") {
       $ash = true; // ashkenazic
     } else if ($type == "sep") {

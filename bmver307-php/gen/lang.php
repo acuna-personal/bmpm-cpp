@@ -23,10 +23,30 @@
 
 // GENERIC
 
+  $any = LanguageCode("any", $languages);
+  $arabic = LanguageCode("arabic", $languages);
+  $cyrillic = LanguageCode("cyrillic", $languages);
+  $czech = LanguageCode("czech", $languages);
+  $dutch = LanguageCode("dutch", $languages);
+  $english = LanguageCode("english", $languages);
+  $french = LanguageCode("french", $languages);
+  $german = LanguageCode("german", $languages);
+  $greek = LanguageCode("greek", $languages);
+  $greeklatin = LanguageCode("greeklatin", $languages);
+  $hebrew = LanguageCode("hebrew", $languages);
+  $hungarian = LanguageCode("hungarian", $languages);
+  $italian = LanguageCode("italian", $languages);
+  $latvian = LanguageCode("latvian", $languages);
+  $polish = LanguageCode("polish", $languages);
+  $portuguese = LanguageCode("portuguese", $languages);
+  $romanian = LanguageCode("romanian", $languages);
+  $russian = LanguageCode("russian", $languages);
+  $spanish = LanguageCode("spanish", $languages);
+  $turkish = LanguageCode("turkish", $languages);
+
   // make the sum of all languages be visible in the function
 
    $all = $english+$german+$polish+$romanian+$russian+$hungarian+$spanish+$french+$cyrillic+$hebrew+$portuguese+$italian+$dutch+$czech+$turkish+$greek+$greeklatin+$arabic+$latvian;
-   $_GET['all'] = $all;
 
   // format of entries in $languageRules table is
   //    (pattern, language, acceptance)
@@ -325,36 +345,5 @@
     array('/^h/', $russian, false)
     
         );
-
-  function Language($name, $rules) {
-    // convert $name to utf8
-    $name = utf8_encode($name); // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
-    if (strpos($name, "&") !== false) { // takes care of ampersand-notation encoding of unicode (&#...;)
-      $name = html_entity_decode($name, ENT_NOQUOTES, "UTF-8");
-    }
-    return Language_UTF8($name, $rules);
-  }
-
-  function Language_UTF8($name, $rules) {
-//    $name = mb_strtolower($name, mb_detect_encoding($name));
-    $name = mb_strtolower($name, "UTF-8");
-    $all = $_GET['all'];
-    $choicesRemaining = $all;
-    for ($i=0; $i<count($rules); $i++) {
-      list($letters, $languages, $accept) = $rules[$i];
-//echo "testing name=$name letters=$letters languages=$languages accept=$accept<br>";
-      if (preg_match($letters, $name)) {
-        if ($accept) {
-          $choicesRemaining &= $languages;
-        } else { // reject
-          $choicesRemaining &= (~$languages) % ($all+1);
-        }
-      }
-    }
-    if ($choicesRemaining == 0) {
-      $choicesRemaining = 1;
-    }
-    return $choicesRemaining;
-  }
 
 ?> 
