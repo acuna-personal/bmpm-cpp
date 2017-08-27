@@ -25,4 +25,4 @@
 
   include_once "approxrussian.php";
   $approx[LanguageIndex("cyrillic", $languages)] = $approxRussian;
-?> 
+?>

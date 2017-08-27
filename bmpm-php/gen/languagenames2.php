@@ -20,7 +20,6 @@
    * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
-  namespace BMPM\Generic;
 
   $languages = array
     ("any", "arabic", "cyrillic", "czech", "dutch", "english", "french", "german", "greek",

@@ -21,66 +21,66 @@
  *
  */
 
-include_once "bmpm.php";
+error_reporting(E_ALL);
+
+include_once "BMPM.php";
 
 function typeForName($typeName) {
   switch ($typeName) {
     case "sep":
-      return BMPM\TYPE_SEPHARDIC;
+      return BMPM::TYPE_SEPHARDIC;
     case "ash":
-      return BMPM\TYPE_ASHKENAZI;
+      return BMPM::TYPE_ASHKENAZI;
   }
-  return BMPM\TYPE_ANY;
+  return BMPM::TYPE_GENERIC;
 }
 
-function languageForName() {
+function languageForName($languageName) {
   switch ($languageName) {
     case "arabic":
-      return BMPM\LANGUAGE_ARABIC;
+      return BMPM::LANGUAGE_ARABIC;
     case "cyrillic":
-      return BMPM\LANGUAGE_CYRILLIC;
+      return BMPM::LANGUAGE_CYRILLIC;
     case "czech":
-      return BMPM\LANGUAGE_CZECH;
+      return BMPM::LANGUAGE_CZECH;
     case "dutch":
-      return BMPM\LANGUAGE_DUTCH;
+      return BMPM::LANGUAGE_DUTCH;
     case "english":
-      return BMPM\LANGUAGE_ENGLISH;
+      return BMPM::LANGUAGE_ENGLISH;
     case "french":
-      return BMPM\LANGUAGE_FRENCH;
+      return BMPM::LANGUAGE_FRENCH;
     case "german":
-      return BMPM\LANGUAGE_GERMAN;
+      return BMPM::LANGUAGE_GERMAN;
     case "greek":
-      return BMPM\LANGUAGE_GREEK;
+      return BMPM::LANGUAGE_GREEK;
     case "greeklatin":
-      return BMPM\LANGUAGE_GREEKLATIN;
+      return BMPM::LANGUAGE_GREEKLATIN;
     case "hebrew":
-      return BMPM\LANGUAGE_HEBREW;
+      return BMPM::LANGUAGE_HEBREW;
     case "hungarian":
-      return BMPM\LANGUAGE_HUNGARIAN;
+      return BMPM::LANGUAGE_HUNGARIAN;
     case "italian":
-      return BMPM\LANGUAGE_ITALIAN;
+      return BMPM::LANGUAGE_ITALIAN;
     case "latvian":
-      return BMPM\LANGUAGE_LATVIAN;
+      return BMPM::LANGUAGE_LATVIAN;
     case "polish":
-      return BMPM\LANGUAGE_POLISH;
+      return BMPM::LANGUAGE_POLISH;
     case "portuguese":
-      return BMPM\LANGUAGE_PORTUGUESE;
+      return BMPM::LANGUAGE_PORTUGUESE;
     case "romanian":
-      return BMPM\LANGUAGE_ROMANIAN;
+      return BMPM::LANGUAGE_ROMANIAN;
     case "russian":
-      return BMPM\LANGUAGE_RUSSIAN;
+      return BMPM::LANGUAGE_RUSSIAN;
     case "spanish":
-      return BMPM\LANGUAGE_SPANISH;
+      return BMPM::LANGUAGE_SPANISH;
     case "turkish":
-      return BMPM\LANGUAGE_TURKISH;
+      return BMPM::LANGUAGE_TURKISH;
   }
-  return BMPM\LANGUAGE_ANY;
+  return BMPM::LANGUAGE_ANY;
 }
 
 $inputFileName = $argv[1];
 $outputFileName = $argv[2];
-$languageName = $argv[3];
-$languageCode = BMPM\LanguageCode($languageName, $languages);
 
 // open input and output files
 
@@ -105,11 +105,12 @@ for ($ln=0; $ln<count($lines); $ln++){
   $comps = explode("\t", trim($lines[$ln]));
   $name = $comps[0];
   $typeName = $comps[1];
+  $languageName = $comps[2];
 
-  $bmpm = BMPM.getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName));
-  $soundex = BMPM\getDaitchMotokoffSoundex($name);
-  fputs($handle, "$name\t$numbers2\t$soundex\n");
+  $bmpm = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName));
+  $soundex = BMPM::getDaitchMotokoffSoundex($name);
+  fputs($handle, "$name\t$bmpm\t$soundex\n");
 }
-print_r($GLOBALS);
-echo "Done<br>";
-?> 
+
+echo "Done\n";
+?>

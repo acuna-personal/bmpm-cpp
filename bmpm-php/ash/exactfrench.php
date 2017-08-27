@@ -26,7 +26,4 @@
  include_once "exactrussian.php";
  $exact[LanguageIndex("french", $languages)] = $exactRussian;
 
-?> 
-
-
-
+?>

@@ -21,8 +21,6 @@
    *
    */
 
-namespace BMPM;
-
 $firstLetter = 'a';
 $lastLetter = 'z';
 $vowels = "aeioujy";

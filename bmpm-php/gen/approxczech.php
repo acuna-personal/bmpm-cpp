@@ -28,4 +28,4 @@
   $approx[LanguageIndex("czech", $languages)] = $approxFrench;
 
   
-?> 
+?>

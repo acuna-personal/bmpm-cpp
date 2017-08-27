@@ -21,8 +21,6 @@
    *
    */
 
-  namespace BMPM\Sephardic;
-
   $languages = array
     ("any", "french", "hebrew", "italian", "portuguese", "spanish");
 

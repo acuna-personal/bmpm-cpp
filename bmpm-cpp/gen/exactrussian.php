@@ -32,4 +32,4 @@
  
   $exact[LanguageIndex("russian", $languages)] = $exactRussian;
 
-?> 
+?>

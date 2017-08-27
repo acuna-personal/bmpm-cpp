@@ -21,8 +21,6 @@
    *
    */
 
-  namespace BMPM\Generic;
-
   $languages = array
     ("any", "arabic", "cyrillic", "czech", "dutch", "english", "french", "german", "germandjsg", "greek",
      "greeklatin", "hebrew", "hungarian", "italian", "latvian", "polish", "polishdjskp", "portuguese","romanian",

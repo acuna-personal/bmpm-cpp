@@ -21,8 +21,6 @@
    *
    */
 
-  namespace BMPM\Generic;
-
 //GENERAL
 include_once "exactapproxcommon.php";
 
@@ -127,4 +125,4 @@ $hebrewCommon = array(
       
 $hebrewCommon = array_merge($exactApproxCommon, $hebrewCommon);
     
-?> 
+?>

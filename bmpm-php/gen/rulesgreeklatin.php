@@ -131,4 +131,4 @@
   );
 
   $rules[LanguageIndex("greeklatin", $languages)] = $rulesGreeklatin;
-?> 
+?>

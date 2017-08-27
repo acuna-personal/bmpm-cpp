@@ -21,8 +21,6 @@
    *
    */
 
-  namespace BMPM\Ashkenazi;
-
   $languages = array
     ("any", "cyrillic", "english", "french", "german", "hebrew",
      "hungarian", "polish", "romanian", "russian", "spanish");

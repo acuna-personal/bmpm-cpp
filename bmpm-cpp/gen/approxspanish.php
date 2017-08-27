@@ -33,4 +33,4 @@
   $approxSpanish = array_merge($approxFrench, $approxSpanish);
 
   
-?> 
+?>

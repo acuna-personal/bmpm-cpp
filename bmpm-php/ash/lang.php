@@ -23,7 +23,6 @@
 
   // ASHKENAZIC
 
-  $any = LanguageCode("any", $languages);
   $cyrillic = LanguageCode("cyrillic", $languages);
   $english = LanguageCode("english", $languages);
   $french = LanguageCode("french", $languages);
@@ -244,4 +243,4 @@
     
         );
 
-?> 
+?>

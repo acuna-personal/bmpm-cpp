@@ -21,7 +21,6 @@
    *
    */
 
-  $any = LanguageCode("any", $languages);
   $french = LanguageCode("french", $languages);
   $hebrew = LanguageCode("hebrew", $languages);
   $italian = LanguageCode("italian", $languages);
@@ -121,4 +120,4 @@
         
             );
 
-?> 
+?>

@@ -695,4 +695,4 @@ $result = $result & 0x7fffffff;
 
   }
 
-?> 
+?>

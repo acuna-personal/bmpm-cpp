@@ -31,7 +31,4 @@
   $exact[LanguageIndex("latvian", $languages)] = $exactLatvian;
 
 
-?> 
-
-
-
+?>

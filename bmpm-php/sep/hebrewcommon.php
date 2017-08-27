@@ -21,8 +21,6 @@
    *
    */
 
-  namespace BMPM\Sephardic;
-
 //Sephardic
 include_once "exactapproxcommon.php";
 
@@ -101,4 +99,4 @@ $hebrewCommon = array(
       
 $hebrewCommon = array_merge($exactApproxCommon, $hebrewCommon);
     
-?> 
+?>

@@ -22,14 +22,14 @@
    */
 
    // 1 is language code for any
-  function Phonetic($input, $rules, $finalRules1, $finalRules2, $languageArg="1", $concat=false, $type) {
+  function Phonetic($input, $type, $rules, $finalRules1, $finalRules2, $languageArg="1", $concat=false) {
 
     // convert $input to utf8
     $input = utf8_encode($input); // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
     if (strpos($input, "&") !== false) { // takes care of ampersand-notation encoding of unicode (&#...;)
       $input = html_entity_decode($input, ENT_NOQUOTES, "UTF-8");
     }
-    return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat, $type);
+    return Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
   function RedoLanguage($input, $rules, $finalRules1, $finalRules2, $concat, $languageRules) {
@@ -38,7 +38,7 @@
     return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
-  function Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false, $type) {
+  function Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false) {
     $debug = false;
 
 if ($debug) echo "<hr>";
@@ -337,9 +337,14 @@ if ($debug) echo "after language rules: <b>$phonetic</b><br><br>";
     $phoneticArray = explode("|", $phonetic);
 
     $fileName = ""; // will be used when debugging
+
+    print_r($finalRules);
+    echo "-----------";
+    print_r($finalRules[count($finalRules)-1]);
     if (count($finalRules[count($finalRules)-1]) == 1) { // last item is name of the file
       $fileName = array_pop($finalRules);
       $fileName = $fileName[0];
+      echo "POPPING\n";
     }
 
     for ($k=0; $k<count($phoneticArray); $k++) {
@@ -682,4 +687,4 @@ $result = $result & 0x7fffffff;
 
   }
 
-?> 
+?>

@@ -20,9 +20,7 @@
    * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
-
-  namespace BMPM;
-
+  
   function soundx_name($MyStrArg) {
 
     $GROUPSEPARATOR = " ";

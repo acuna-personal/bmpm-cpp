@@ -79,4 +79,4 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "<br>";
     fputs($handle, "$name\t$numbers2\t$soundex\n");
   }
   echo "Done<br>";
-?> 
+?>

@@ -110,4 +110,4 @@
   );
 
   $rules[LanguageIndex("cyrillic", $languages)] = $rulesCyrillic;
-?> 
+?>

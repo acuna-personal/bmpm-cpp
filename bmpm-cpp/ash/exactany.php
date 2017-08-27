@@ -43,4 +43,4 @@
 
   $exact[LanguageIndex("any", $languages)] = $exactAny;
 
-?> 
+?>

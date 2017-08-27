@@ -167,4 +167,4 @@ $approxAny = array(
 
   $approx[LanguageIndex("any", $languages)] = $approxAny;
 
-?> 
+?>

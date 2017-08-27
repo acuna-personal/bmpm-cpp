@@ -27,4 +27,4 @@
 
   $exact[LanguageIndex("romanian", $languages)] = $exactRussian;
 
-?> 
+?>

@@ -61,4 +61,4 @@
   );
 
   $approx[LanguageIndex("russian", $languages)] = $approxRussian;
-?> 
+?>

@@ -32,4 +32,4 @@
   $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
 
   
-?> 
+?>

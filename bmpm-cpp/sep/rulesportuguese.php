@@ -114,4 +114,4 @@
   );
 
   $rules[LanguageIndex("portuguese", $languages)] = $rulesPortuguese;
-?> 
+?>

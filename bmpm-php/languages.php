@@ -33,14 +33,18 @@ function Language_UTF8($name, $rules, $allLanguagesBitmap) {
 function LanguageIndex($langName, $languages) {
   for ($i=0; $i<count($languages); $i++) {
     if ($languages[$i] == $langName) {
+      //echo "LanguageIndex: $i\n";
       return $i;
     }
   }
+  //echo "LanguageIndex Not Found\n";
   return 0; // name not found
 }
 
 function LanguageName($index, $languages) {
   if ($index < 0 || $index > count($languages)) {
+    echo "index out of range: $index\n";
+    exit;
     return "any"; // index out of range
   }
   return $languages[$index];

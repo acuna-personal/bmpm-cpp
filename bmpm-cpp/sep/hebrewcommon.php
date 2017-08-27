@@ -99,4 +99,4 @@ $hebrewCommon = array(
       
 $hebrewCommon = array_merge($exactApproxCommon, $hebrewCommon);
     
-?> 
+?>

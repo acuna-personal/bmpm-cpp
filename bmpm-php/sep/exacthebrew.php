@@ -28,4 +28,4 @@
  
   $exact[LanguageIndex("hebrew", $languages)] = $exactHebrew;
 
-?> 
+?>

@@ -23,7 +23,6 @@
 
 // GENERIC
 
-  $any = LanguageCode("any", $languages);
   $arabic = LanguageCode("arabic", $languages);
   $cyrillic = LanguageCode("cyrillic", $languages);
   $czech = LanguageCode("czech", $languages);
@@ -346,4 +345,4 @@
     
         );
 
-?> 
+?>

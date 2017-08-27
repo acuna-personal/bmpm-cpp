@@ -26,4 +26,4 @@
   include_once "exactany.php";
   $exact[LanguageIndex("german", $languages)] = $exactAny;
 
-?> 
+?>

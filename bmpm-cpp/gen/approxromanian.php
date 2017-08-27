@@ -25,4 +25,4 @@
 
   include_once "approxpolish.php";
   $approx[LanguageIndex("romanian", $languages)] = $approxPolish;
-?> 
+?>

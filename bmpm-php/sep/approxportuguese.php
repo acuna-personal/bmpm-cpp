@@ -27,4 +27,4 @@
 
   $approx[LanguageIndex("portuguese", $languages)] = $approxFrench;
 
-?> 
+?>
