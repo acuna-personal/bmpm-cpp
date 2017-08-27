@@ -1,16 +1,15 @@
 <?php
 
 // bmpm.php
-// To simplify includes
 
-include "dmsoundex.php";
-include "phoneticengine.php";
-include "languages.php";
+include_once "dmsoundex.php";
+include_once "phoneticengine.php";
+include_once "languages.php";
 
 abstract class BMPM {
 	const TYPE_SEPHARDIC = "sep";
 	const TYPE_ASHKENAZI = "ash";
-	const TYPE_ANY = "any";
+	const TYPE_GENERIC = "gen";
 
 	const LANGUAGE_ANY = "any";
 	const LANGUAGE_ARABIC = "arabic";
@@ -34,49 +33,95 @@ abstract class BMPM {
 	const LANGUAGE_TURKISH = "turkish";
 
 	private $_type;
-	private $_languages;
+	private $_languageNames;
 	private $_rules;
 	private $_approx;
 	private $_approxCommon;
 	private $_languageRules;
+	private $_allLanguagesBitmap;
 
 	private static $_bmpmAshkenazi = null;
 	private static $_bmpmGeneric = null;
 	private static $_bmpmSephardic = null;
 
-	function getBMPM($type = BMPM::TYPE_ANY) {
-		// Fall back to TYPE_ANY if we don't have matching for that language in that type.
-		$languages = _getLanguages($type);
-		if (!in_array($language, $languages)) {
-			$type = TYPE_ANY;
-			$languages = _getLanguages($type);
-		}
-
+	public static function getBMPM($type = BMPM::TYPE_GENERIC) {
+		$bmpm = null;
 		switch ($type) {
 			case BMPM::TYPE_SEPHARDIC:
-				if ($_bmpmSephardic == null) {
-					$_bmpmSephardic = new BMPMSephardic();
+				if (BMPM::$_bmpmSephardic == null) {
+					BMPM::$_bmpmSephardic = new BMPMSephardic();
 				}
 
-				return $_bmpmSephardic;
+				$bmpm = BMPM::$_bmpmSephardic;
+				break;
 
 			case BMPM::TYPE_ASHKENAZI:
-				if ($_bmpmAshkenazi == null) {
-					$_bmpmAshkenazi = new BMPMSephardic();
+				if (BMPM::$_bmpmAshkenazi == null) {
+					BMPM::$_bmpmAshkenazi = new BMPMAshkenazi();
 				}
 
-				return $_bmpmAshkenazi;
+				$bmpm = BMPM::$_bmpmAshkenazi;
+				break;
 
 			case BMPM::TYPE_GENERIC:
 			default:
-				if ($_bmpmGeneric == null) {
-					$_bmpmGeneric = new BMPMGeneric();
+				if (BMPM::$_bmpmGeneric == null) {
+					BMPM::$_bmpmGeneric = new BMPMGeneric();
 				}
 
-				return $_bmpmGeneric;
-
+				$bmpm = BMPM::$_bmpmGeneric;
 		}
-		return null;
+		return $bmpm;
+	}
+
+	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY) {
+		$bmpm = BMPM::getBMPM($type);
+		if ($bmpm == null) {
+			echo "Null bmpm";
+			return null;
+		}
+
+		// Fall back to TYPE_GENERIC if we don't have matching for that language in that type.
+		if (!$bmpm->handlesLanguage($language)) {
+			echo "falling back from $type for $language\n";
+			$type = BMPM::TYPE_GENERIC;
+			$bmpm = BMPM::getBMPM($type);
+			if ($bmpm == null) {
+				echo "Null bmpm";
+				return null;
+			}
+		}
+
+		//print_r($bmpm);
+
+		$rules = $bmpm->getRules();
+		$approx = $bmpm->getApprox();
+		$approxCommon = $bmpm->getApproxCommon();
+		$allLanguagesBitmap = $bmpm->getAllLanguagesBitmap();
+		$languages = $bmpm->getLanguageNames();
+
+		$languageCode = LanguageCode($language, $languages, $allLanguagesBitmap);
+		if ($language == BMPM::LANGUAGE_ANY || $language == "") {
+			$languageCode = Language_UTF8($name, $languageRules, $allLanguagesBitmap);
+		} else {
+			$languageCode = $languageCode;
+		}
+
+		$result = Phonetic_UTF8(
+			$name,
+			$type,
+			$rules[LanguageIndexFromCode($languageCode, $languages)],
+			$approxCommon,
+			$approx[LanguageIndexFromCode($languageCode, $languages)],
+			$languageCode
+			);
+		$numbers = PhoneticNumbers($result);
+
+		return $numbers;
+	}
+
+	public static function getDaitchMotokoffSoundex($name) {
+		return soundx_name($name);
 	}
 
 	function getType() {
@@ -87,12 +132,21 @@ abstract class BMPM {
 		$this->_type = $type;
 	}
 
-	function getLanguages() {
-		return $this->_languages;
+	function getLanguageNames() {
+		return $this->_languageNames;
 	}
 
-	function setLanguages($languages) {
-		$this->_languages = $languages;
+	function setLanguageNames($languageNames) {
+		$this->_languageNames = $languageNames;
+	}
+
+	function handlesLanguage($language) {
+		if ($this->_languageNames == null) {
+			echo "handlesLanguage: Null languages list\n";
+			debug_print_backtrace();
+			return false;
+		}
+		return in_array($language, $this->_languageNames);
 	}
 
 	function getApprox() {
@@ -101,6 +155,14 @@ abstract class BMPM {
 
 	function setApprox($approx) {
 		$this->_approx = $approx;
+	}
+
+	function getApproxCommon() {
+		return $this->_approxCommon;
+	}
+
+	function setApproxCommon($approxCommon) {
+		$this->_approxCommon = $approxCommon;
 	}
 
 	function getRules() {
@@ -112,103 +174,24 @@ abstract class BMPM {
 	}
 
 	function getLanguageRules() {
-		$this->_languageRules;
+		return $this->_languageRules;
 	}
 
 	function setLanguageRules($languageRules) {
 		$this->_languageRules = $languageRules;
 	}
-}
 
-
-class BMPMGeneric extends BMPM {
-	function __construct() {
-		$this->setType(BMPM::TYPE_GENERIC);
-		include "gen/approxcommon.php";
-		include "gen/lang.php";
-
-		include "gen/rulesany.php";
-		include "gen/rulesarabic.php";
-		include "gen/rulescyrillic.php";
-		include "gen/rulesczech.php";
-		include "gen/rulesdutch.php";
-		include "gen/rulesenglish.php";
-		include "gen/rulesfrench.php";
-		include "gen/rulesgerman.php";
-		include "gen/rulesgreek.php";
-		include "gen/rulesgreeklatin.php";
-		include "gen/ruleshebrew.php";
-		include "gen/ruleshungarian.php";
-		include "gen/rulesitalian.php";
-		include "gen/ruleslatvian.php";
-		include "gen/rulespolish.php";
-		include "gen/rulesportuguese.php";
-		include "gen/rulesromanian.php";
-		include "gen/rulesrussian.php";
-		include "gen/rulesspanish.php";
-
-		$this->setRules($rules);
-
-		include "gen/approxany.php";
-		include "gen/approxarabic.php";
-		include "gen/approxcyrillic.php";
-		include "gen/approxczech.php";
-		include "gen/approxdutch.php";
-		include "gen/approxenglish.php";
-		include "gen/approxfrench.php";
-		include "gen/approxgerman.php";
-		include "gen/approxgreek.php";
-		include "gen/approxgreeklatin.php";
-		include "gen/approxhebrew.php";
-		include "gen/approxhungarian.php";
-		include "gen/approxitalian.php";
-		include "gen/approxlatvian.php";
-		include "gen/approxpolish.php";
-		include "gen/approxportuguese.php";
-		include "gen/approxromanian.php";
-		include "gen/approxrussian.php";
-		include "gen/approxspanish.php";
-
-		$this->setApprox($approx);
-
-		return $this;
+	function getAllLanguagesBitmap() {
+		return $this->_allLanguagesBitmap;
 	}
 
-	static function getPhoneticEncoding($name, $type = TYPE_ANY, $language = LANGUAGE_AUTO) {
-		$bmpm = $this->getBMPM($type);
-		if ($bmpm == null) {
-			echo "Null bmpm";
-			return null;
-		}
-
-		$rules = $this->getRules($rules);
-		$approx = $this->getApprox($type);
-		$approxCommon = $this->getApproxCommon($type);
-		$allLanguagesBitmap = $this->getAllLanguagesBitmap($type);
-
-		$languageCode = LanguageCode($language, $languages, $allLanguagesBitmap);
-		if ($languageName == "auto" || $language == "") {
-			$languageCode = Language_UTF8($name, $this->$languageRules, $allLanguagesBitmap);
-		} else {
-			$languageCode = $languageCode;
-		}
-
-		$result = Phonetic_UTF8(
-			$name,
-			$rules[LanguageIndexFromCode($languageCode, $languages)],
-			$approxCommon,
-			$approx[LanguageIndexFromCode($languageCode, $languages)],
-			$languageCode2,
-			$type
-			);
-		$numbers = PhoneticNumbers($result);
-
-		return $numbers;
-	}
-
-	static function getDaitchMotokoffSoundex($name) {
-		return soundx_name($name);
+	function setAllLanguagesBitmap($allLanguagesBitmap) {
+		$this->_allLanguagesBitmap = $allLanguagesBitmap;
 	}
 }
+
+include_once "BMPMGeneric.php";
+include_once "BMPMSephardic.php";
+include_once "BMPMAshkenazi.php";
 
 ?>
