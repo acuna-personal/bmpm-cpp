@@ -3,6 +3,10 @@
 $debug = false; // for debugging the test suite
 error_reporting(E_ALL);
 
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    throw new RuntimeException($errstr . " on line " . $errline . " in file " . $errfile);
+});
+
 if ($debug) {
   set_time_limit(60);
 }
@@ -60,7 +64,11 @@ function languageForName($languageName) {
     case "turkish":
       return BMPM::LANGUAGE_TURKISH;
   }
-  return BMPM::LANGUAGE_AUTO;
+  return BMPM::LANGUAGE_ANY;
+}
+
+function beep() {
+  echo "\x07";
 }
 
 $inputFileName = $argv[1];
@@ -68,13 +76,22 @@ $inputFileName = $argv[1];
 // process each line in the input file
 
 $fails = 0;
-$lines = file($inputFileName);
-for ($ln=0; $ln<count($lines); $ln++){
-  if (($ln+1)%100 == 0) echo "$inputFileName::: " . ($ln+1) . " of " . count($lines) . "\n";
+
+$handle = fopen($inputFileName, "r");
+if (!$handle) {
+  echo "Unable to open: $inputFileName\n";
+  exit(1);
+}
+
+$ln = 1;
+while (($line = fgets($handle)) !== false) {
+  if ($ln % 100 == 0) {
+    echo "$inputFileName:$ln\n";
+  }
   
-  $comps = explode("\t", trim($lines[$ln], "\n\r")); // some lines may have trailing tabs which we must keep
+  $comps = explode("\t", trim($line, "\n\r")); // some lines may have trailing tabs which we must keep
   if (count($comps) != 5) {
-    echo "$inputFileName:" . ($ln+1) . " invalid line: " . $lines[$ln] . "\n";
+    echo "$inputFileName:" . $ln . " invalid line: " . $lines[$ln] . "\n";
     $fails++;
     continue;
   }
@@ -82,20 +99,32 @@ for ($ln=0; $ln<count($lines); $ln++){
   list($name, $typeName, $languageName, $bmpmExpected, $soundexExpected) = $comps;
 
   if ($debug) {
-    echo "$inputFileName:" . ($ln+1) . " [[$name $typeName $languageName]]\n";
+    echo "$inputFileName:$ln [[$name $typeName $languageName]]\n";
   }
 
-  $bmpmActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName));
-  if ($bmpmActual != $bmpmExpected) {
-    echo "$inputFileName:" . ($ln+1) . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName]]\n[[expected]] $bmpmExpected\n  [[actual]] $bmpmActual\n";
+  try {
+    $bmpmActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName));
+    if ($bmpmActual != $bmpmExpected) {
+      echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName]]\n[[expected]] $bmpmExpected\n  [[actual]] $bmpmActual\n";
+      $fails++;
+      beep();
+    }
+
+    $soundexActual = BMPM::getDaitchMotokoffSoundex($name);
+    if ($soundexExpected != $soundexActual) {
+      echo "$inputFileName:" . $ln . " BMPM::getDaitchMotokoffSoundex failed: [[$name]]\n[[expected]] $soundexExpected\n  [[actual]] $soundexActual\n";
+      $fails++;
+      beep();
+    }
+  } catch (Exception $e) {
+    echo "$inputFileName:$ln [[$name $typeName $languageName]]\n";
+    echo $e->getMessage() . "\n";
+    echo $e->getTraceAsString() . "\n";
     $fails++;
+    beep();
   }
 
-  $soundexActual = BMPM::getDaitchMotokoffSoundex($name);
-  if ($soundexExpected != $soundexActual) {
-    echo "$inputFileName:" . ($ln+1) . " BMPM::getDaitchMotokoffSoundex failed: [[$name]]\n[[expected]] $soundexExpected\n  [[actual]] $soundexActual\n";
-    $fails++;
-  }
+  $ln++;
 }
 
 echo "$fails tests failed\n";

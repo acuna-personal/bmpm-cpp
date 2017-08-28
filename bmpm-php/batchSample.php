@@ -75,8 +75,10 @@ function languageForName($languageName) {
       return BMPM::LANGUAGE_SPANISH;
     case "turkish":
       return BMPM::LANGUAGE_TURKISH;
+    case "any":
+      return BMPM::LANGUAGE_ANY;
   }
-  return BMPM::LANGUAGE_ANY;
+  return BMPM::LANGUAGE_AUTO;
 }
 
 $inputFileName = $argv[1];

@@ -18,7 +18,9 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/rulesfrench.php";
 		include "ash/rulesgerman.php";
 		include "ash/ruleshebrew.php";
+		include "ash/ruleshungarian.php";
 		include "ash/rulespolish.php";
+		include "ash/rulesromanian.php";
 		include "ash/rulesrussian.php";
 		include "ash/rulesspanish.php";
 
@@ -31,6 +33,7 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/approxfrench.php";
 		include "ash/approxgerman.php";
 		include "ash/approxhebrew.php";
+		include "ash/approxhungarian.php";
 		include "ash/approxpolish.php";
 		include "ash/approxromanian.php";
 		include "ash/approxrussian.php";

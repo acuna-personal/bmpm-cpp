@@ -31,6 +31,7 @@ class BMPMGeneric extends BMPM {
 		include "gen/rulesromanian.php";
 		include "gen/rulesrussian.php";
 		include "gen/rulesspanish.php";
+		include "gen/rulesturkish.php";
 		$this->setRules($rules);
 
 		$approx = array();
@@ -52,7 +53,7 @@ class BMPMGeneric extends BMPM {
 		include "gen/approxportuguese.php";
 		include "gen/approxromanian.php";
 		include "gen/approxrussian.php";
-		include "gen/approxspanish.php";
+		include "gen/approxturkish.php";
 		$this->setApprox($approx);
 
 		return $this;

@@ -11,7 +11,7 @@ abstract class BMPM {
 	const TYPE_ASHKENAZI = "ash";
 	const TYPE_GENERIC = "gen";
 
-	const LANGUAGE_AUTO = "any";
+	const LANGUAGE_ANY = "any";
 	const LANGUAGE_ARABIC = "arabic";
 	const LANGUAGE_CYRILLIC = "cyrillic";
 	const LANGUAGE_CZECH = "czech";
@@ -91,8 +91,6 @@ abstract class BMPM {
 			}
 		}
 
-		//print_r($bmpm);
-
 		$rules = $bmpm->getRules();
 		$approx = $bmpm->getApprox();
 		$approxCommon = $bmpm->getApproxCommon();
@@ -100,11 +98,25 @@ abstract class BMPM {
 		$languages = $bmpm->getLanguageNames();
 		$languageRules = $bmpm->getLanguageRules();
 
-		$languageCode = LanguageCode($language, $languages, $allLanguagesBitmap);
-		if ($language == BMPM::LANGUAGE_AUTO || $language == "") {
+		if ($language == BMPM::LANGUAGE_ANY || $language == "") {
 			$languageCode = Language_UTF8($name, $languageRules, $allLanguagesBitmap);
 		} else {
-			$languageCode = $languageCode;
+			$languageCode = LanguageCode($language, $languages, $allLanguagesBitmap);
+		}
+
+
+		$idx = LanguageIndexFromCode($languageCode, $languages);
+
+		if (!isset($rules[$idx])) {
+			echo "$name => " . LanguageName($idx, $languages) . "\n";
+			echo "getPhoneticEncoding: No rules for ($name, $type, $language)\n";
+			return null;
+		}
+
+		if (!isset($approx[$idx])) {
+			echo "$name => " . LanguageName($idx, $languages) . "\n";
+			echo "getPhoneticEncoding: No approx for ($name, $type, $language)\n";
+			return null;
 		}
 
 		$result = Phonetic_UTF8(
@@ -112,9 +124,9 @@ abstract class BMPM {
 			$type,
 			$allLanguagesBitmap,
 			$languageRules,
-			$rules[LanguageIndexFromCode($languageCode, $languages)],
+			$rules[$idx],
 			$approxCommon,
-			$approx[LanguageIndexFromCode($languageCode, $languages)],
+			$approx[$idx],
 			$languageCode
 			);
 		$numbers = PhoneticNumbers($result);

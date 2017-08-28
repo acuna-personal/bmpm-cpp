@@ -66,7 +66,7 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n
     // comps[2] and comps[3] aren't yet supported
 
     $languageCode = LanguageCode($languageName, $languages);
-    if ($languageName == "auto" || $languageName == "") {
+    if ($languageName == "any" || $languageName == "") {
       $languageCode2 = Language_UTF8($name, $languageRules);
     } else {
       $languageCode2 = $languageCode;
