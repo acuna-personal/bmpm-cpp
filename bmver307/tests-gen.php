@@ -21,10 +21,10 @@
    *
    */
 
-  $type = $argv[3]; // ash, sep, or gen
-  if ($type == "") {
-    $type = "gen"; // generic
-  }
+  $typeOrig = $argv[3]; // ash, sep, or gen
+  $type = $typeOrig; // gets changed by includes below....
+  $_GET['type'] = $type;
+  $language = $argv[4];
 
   include "phoneticutils.php";
   include "phoneticengine.php";
@@ -58,8 +58,9 @@
   
   $lines = file($inputFileName);
   for ($ln=0; $ln<count($lines); $ln++){
-if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "<br>";
-    $comps = explode("\t", $lines[$ln]);
+if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n
+  ";
+    $comps = explode("\t", trim($lines[$ln]));
     $name = $comps[0];
     $languageName = $comps[1];
     // comps[2] and comps[3] aren't yet supported
@@ -75,8 +76,8 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "<br>";
                              $approx[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);
     $numbers2 = PhoneticNumbers($result2);
 
-    $soundex = soundx_name($name);
-    fputs($handle, "$name\t$numbers2\t$soundex\n");
+    $soundex = trim(soundx_name($name));
+    fputs($handle, "$name\t$typeOrig\t$languageName\t$numbers2\t$soundex\n");
   }
   echo "Done<br>";
 ?> 

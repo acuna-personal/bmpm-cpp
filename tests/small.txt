@@ -1,4 +1,3 @@
-telman	ash	polish
-kazez	sep	turkish
-johnson	any	english
-kazez	sep	any
+telman	any
+kazez	any
+johnson	any

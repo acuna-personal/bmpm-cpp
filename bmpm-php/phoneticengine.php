@@ -32,13 +32,13 @@
     return Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
-  function RedoLanguage($input, $rules, $finalRules1, $finalRules2, $concat, $languageRules) {
+  function RedoLanguage($input, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, $concat=false) {
     // we can do a better job of determining the language now that multiple names have been split
-    $languageArg = Language($input, $languageRules);
-    return Phonetic_UTF8($input, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
+    $languageArg = Language($input, $languageRules, $allLanguagesBitmap);
+    return Phonetic_UTF8($input, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
-  function Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false) {
+  function Phonetic_UTF8($input, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, $languageArg="", $concat=false) {
     $debug = false;
 
 if ($debug) echo "<hr>";
@@ -79,17 +79,17 @@ echo "]<br>";
           $remainder = substr($input, $prefixLength);
           $combined = $list[$j] . $remainder;
           $result =
-            RedoLanguage($remainder, $rules, $finalRules1, $finalRules2, $concat) .
+            RedoLanguage($remainder, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, "", $concat) .
             "-" .
-            RedoLanguage($combined, $rules, $finalRules1, $finalRules2, $concat);
+            RedoLanguage($remainder, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, "", $concat);
           return $result;
         } else if (substr($input, 0, 2) == "d'") { // check for d'
           $remainder = substr($input, 2);
           $combined = "d" . $remainder;
           $result =
-            RedoLanguage($remainder, $rules, $finalRules1, $finalRules2, $concat) .
+            RedoLanguage($remainder, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, "", $concat) .
             "-" .
-            RedoLanguage($combined, $rules, $finalRules1, $finalRules2, $concat);
+            RedoLanguage($remainder, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, "", $concat);
           return $result;
         }
       }
@@ -161,7 +161,7 @@ echo "]<br>";
       $result = "";
       for ($i=0; $i<count($words2); $i++) {
         $word = $words2[$i];
-        $result .= "-" . RedoLanguage($word, $rules, $finalRules1, $finalRules2, $concat);
+        $result .= "-" . RedoLanguage($word, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, "", $concat);
       }
       return substr($result, 1); // strip off the leading dash
     }
@@ -338,13 +338,9 @@ if ($debug) echo "after language rules: <b>$phonetic</b><br><br>";
 
     $fileName = ""; // will be used when debugging
 
-    print_r($finalRules);
-    echo "-----------";
-    print_r($finalRules[count($finalRules)-1]);
     if (count($finalRules[count($finalRules)-1]) == 1) { // last item is name of the file
       $fileName = array_pop($finalRules);
       $fileName = $fileName[0];
-      echo "POPPING\n";
     }
 
     for ($k=0; $k<count($phoneticArray); $k++) {
