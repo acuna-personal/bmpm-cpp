@@ -72,7 +72,7 @@ $lines = file($inputFileName);
 for ($ln=0; $ln<count($lines); $ln++){
   if (($ln+1)%100 == 0) echo "$inputFileName::: " . ($ln+1) . " of " . count($lines) . "\n";
   
-  $comps = explode("\t", trim($lines[$ln], "\n")); // some lines may have trailing tabs which we must keep
+  $comps = explode("\t", trim($lines[$ln], "\n\r")); // some lines may have trailing tabs which we must keep
   if (count($comps) != 5) {
     echo "$inputFileName:" . ($ln+1) . " invalid line: " . $lines[$ln] . "\n";
     $fails++;
