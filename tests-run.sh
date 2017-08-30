@@ -1,12 +1,20 @@
 #!/bin/bash
 
-echo "concatenating test suites from dk data..."
-rm tests/suite-all.txt
-gshuf tests/suite-ash.txt | head -500 >> tests/suite-all.txt
-gshuf tests/suite-sep.txt | head -500 >> tests/suite-all.txt
-gshuf tests/suite-gen.txt | head -500 >> tests/suite-all.txt
-#cat tests/suite-ash.txt tests/suite-gen.txt tests/suite-sep.txt > tests/suite-all.txt
-wc -l tests/suite-all.txt
+# Usage: tests/run.sh [num-tests-randomly-selected-from-each-suite]
 
-echo "running tests..."
-php bmpm-php/tests-run.php tests/suite-all.txt
+rm tests/suites/suite-all.txt
+for f in `find tests/suites/* -maxdepth 1`; do
+	if [ $1 > 0 ]
+	then
+		echo "Randomly picking $1 tests from each suite"
+		gshuf $f | head -500 >> tests/suites/suite-all.txt
+	else
+		echo "Concatenating all tests from all suite"
+		cat $f >> tests/suites/suite-all.txt
+	fi
+done
+
+wc -l tests/suites/suite-all.txt
+
+echo "Running tests..."
+php bmpm-php/tests-run.php tests/suites/suite-all.txt
