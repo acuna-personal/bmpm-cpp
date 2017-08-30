@@ -108,6 +108,7 @@ abstract class BMPM {
 
 		$idx = LanguageIndexFromCode($languageCode, $languages);
 
+		echo "$name => " . LanguageName($idx, $languages) . "\n";
 		if (!isset($rules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
 			echo "getPhoneticEncoding: No rules for ($name, $type, $language, $exact)\n";
@@ -128,7 +129,8 @@ abstract class BMPM {
 			$rules[$idx],
 			$equivalencyRulesCommon,
 			$equivalencyRules[$idx],
-			$languageCode
+			$languageCode,
+			$exact // concatenate iff it is an exact match
 			);
 		$numbers = PhoneticNumbers($result);
 

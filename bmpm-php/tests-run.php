@@ -135,4 +135,5 @@ while (($line = fgets($handle)) !== false) {
 }
 
 echo "$fails tests failed\n";
+
 ?>

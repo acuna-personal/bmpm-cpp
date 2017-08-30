@@ -59,6 +59,7 @@ class BMPMGeneric extends BMPM {
 		include "gen/approxportuguese.php";
 		include "gen/approxromanian.php";
 		include "gen/approxrussian.php";
+		include "gen/approxspanish.php";
 		include "gen/approxturkish.php";
 		$this->setApprox($approx);
 
@@ -81,6 +82,7 @@ class BMPMGeneric extends BMPM {
 		include "gen/exactportuguese.php";
 		include "gen/exactromanian.php";
 		include "gen/exactrussian.php";
+		include "gen/exactspanish.php";
 		include "gen/exactturkish.php";
 		$this->setExact($exact);
 

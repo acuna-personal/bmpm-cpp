@@ -42,18 +42,9 @@
   $inputFileName = $argv[1];
   $outputFileName = $argv[2];
 
-  // open input and output files
-  
-  if (!file_exists($outputFileName)) {
-    if (!($handle = fopen($outputFileName,"x"))) {
-      echo "error creating and opening ".$outputFileName;
-      exit;
-    }
-  } else {
-    if (!($handle = fopen($outputFileName,"w"))) {
-      echo "error opening ".$outputFileName;
-      exit;
-    }
+  if (!($handle = fopen($outputFileName,"w"))) {
+    echo "error opening $outputFileName\n";
+    exit;
   }
 
   // process each line in the input file
@@ -75,15 +66,15 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n
     }
 
     $resultExact = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $exactCommon,
-                             $exact[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);
-    $numbersExact = PhoneticNumbers($resultExact);
+                             $exact[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2, true);
+    $phoneticExact = PhoneticNumbers($resultExact);
 
     $resultApprox = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $approxCommon,
-                             $approx[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);
-    $numbersApprox = PhoneticNumbers($resultApprox);
+                             $approx[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2, false);
+    $phoneticApprox = PhoneticNumbers($resultApprox);
 
     $soundex = trim(soundx_name($name));
-    fputs($handle, "$name\t$typeOrig\t$languageName\t$numbersExact\t$numbersApprox\t$soundex\n");
+    fputs($handle, "$name\t$typeOrig\t$languageName\t$phoneticExact\t$phoneticApprox\t$soundex\n");
   }
   echo "Done<br>";
 ?> 
