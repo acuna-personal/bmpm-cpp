@@ -29,12 +29,14 @@
   include "phoneticutils.php";
   include "phoneticengine.php";
   include "$type/approxcommon.php";
+  include "$type/exactcommon.php";
   include "$type/lang.php";
   include "dmsoundex.php";
 
   for ($i=0; $i<count($languages); $i++) {
     include "$type/rules" . $languages[$i] . ".php";
     include "$type/approx" . $languages[$i] . ".php";
+    include "$type/exact" . $languages[$i] . ".php";
   }
 
   $inputFileName = $argv[1];
@@ -72,12 +74,16 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n
       $languageCode2 = $languageCode;
     }
 
-    $result2 = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $approxCommon,
+    $resultExact = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $exactCommon,
+                             $exact[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);
+    $numbersExact = PhoneticNumbers($resultExact);
+
+    $resultApprox = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $approxCommon,
                              $approx[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);
-    $numbers2 = PhoneticNumbers($result2);
+    $numbersApprox = PhoneticNumbers($resultApprox);
 
     $soundex = trim(soundx_name($name));
-    fputs($handle, "$name\t$typeOrig\t$languageName\t$numbers2\t$soundex\n");
+    fputs($handle, "$name\t$typeOrig\t$languageName\t$numbersExact\t$numbersApprox\t$soundex\n");
   }
   echo "Done<br>";
 ?> 

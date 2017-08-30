@@ -3,10 +3,16 @@
 class BMPMAshkenazi extends BMPM {
 	function __construct() {
 		$this->setType(BMPM::TYPE_ASHKENAZI);
+		
 		include "ash/approxcommon.php";
 		$this->setApproxCommon($approxCommon);
+		
+		include "ash/exactcommon.php";
+		$this->setExactCommon($exactCommon);
+		
 		include "ash/languagenames.php";
 		$this->setLanguageNames($languages);
+		
 		include "ash/lang.php";
 		$this->setAllLanguagesBitmap($all);
 		$this->setLanguageRules($languageRules);
@@ -38,8 +44,21 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/approxromanian.php";
 		include "ash/approxrussian.php";
 		include "ash/approxspanish.php";
-
 		$this->setApprox($approx);
+
+		$exact = array();
+		include "ash/exactany.php";
+		include "ash/exactcyrillic.php";
+		include "ash/exactenglish.php";
+		include "ash/exactfrench.php";
+		include "ash/exactgerman.php";
+		include "ash/exacthebrew.php";
+		include "ash/exacthungarian.php";
+		include "ash/exactpolish.php";
+		include "ash/exactromanian.php";
+		include "ash/exactrussian.php";
+		include "ash/exactspanish.php";
+		$this->setExact($exact);
 
 		return $this;
 	}

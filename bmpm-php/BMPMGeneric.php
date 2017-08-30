@@ -3,10 +3,16 @@
 class BMPMGeneric extends BMPM {
 	function __construct() {
 		$this->setType(BMPM::TYPE_GENERIC);
+		
 		include "gen/approxcommon.php";
 		$this->setApproxCommon($approxCommon);
+		
+		include "gen/exactcommon.php";
+		$this->setExactCommon($exactCommon);
+
 		include "gen/languagenames.php";
 		$this->setLanguageNames($languages);
+		
 		include "gen/lang.php";
 		$this->setAllLanguagesBitmap($all);
 		$this->setLanguageRules($languageRules);
@@ -55,6 +61,29 @@ class BMPMGeneric extends BMPM {
 		include "gen/approxrussian.php";
 		include "gen/approxturkish.php";
 		$this->setApprox($approx);
+
+		$exact = array();
+		include "gen/exactany.php";
+		include "gen/exactarabic.php";
+		include "gen/exactcyrillic.php";
+		include "gen/exactczech.php";
+		include "gen/exactdutch.php";
+		include "gen/exactenglish.php";
+		include "gen/exactfrench.php";
+		include "gen/exactgerman.php";
+		include "gen/exactgreek.php";
+		include "gen/exactgreeklatin.php";
+		include "gen/exacthebrew.php";
+		include "gen/exacthungarian.php";
+		include "gen/exactitalian.php";
+		include "gen/exactlatvian.php";
+		include "gen/exactpolish.php";
+		include "gen/exactportuguese.php";
+		include "gen/exactromanian.php";
+		include "gen/exactrussian.php";
+		include "gen/exactturkish.php";
+		$this->setExact($exact);
+
 
 		return $this;
 	}

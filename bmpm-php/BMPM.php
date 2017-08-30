@@ -35,6 +35,8 @@ abstract class BMPM {
 	private $_type;
 	private $_languageNames;
 	private $_rules;
+	private $_exact;
+	private $_exactCommon;
 	private $_approx;
 	private $_approxCommon;
 	private $_languageRules;
@@ -74,7 +76,7 @@ abstract class BMPM {
 		return $bmpm;
 	}
 
-	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY) {
+	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY, $exact = true) {
 		$bmpm = BMPM::getBMPM($type);
 		if ($bmpm == null) {
 			echo "Null bmpm";
@@ -92,8 +94,8 @@ abstract class BMPM {
 		}
 
 		$rules = $bmpm->getRules();
-		$approx = $bmpm->getApprox();
-		$approxCommon = $bmpm->getApproxCommon();
+		$equivalencyRules = $exact ? $bmpm->getExact() : $bmpm->getApprox();
+		$equivalencyRulesCommon = $exact ? $bmpm->getExactCommon() : $bmpm->getApproxCommon();
 		$allLanguagesBitmap = $bmpm->getAllLanguagesBitmap();
 		$languages = $bmpm->getLanguageNames();
 		$languageRules = $bmpm->getLanguageRules();
@@ -104,18 +106,17 @@ abstract class BMPM {
 			$languageCode = LanguageCode($language, $languages, $allLanguagesBitmap);
 		}
 
-
 		$idx = LanguageIndexFromCode($languageCode, $languages);
 
 		if (!isset($rules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No rules for ($name, $type, $language)\n";
+			echo "getPhoneticEncoding: No rules for ($name, $type, $language, $exact)\n";
 			return null;
 		}
 
-		if (!isset($approx[$idx])) {
+		if (!isset($equivalencyRules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No approx for ($name, $type, $language)\n";
+			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
 			return null;
 		}
 
@@ -125,8 +126,8 @@ abstract class BMPM {
 			$allLanguagesBitmap,
 			$languageRules,
 			$rules[$idx],
-			$approxCommon,
-			$approx[$idx],
+			$equivalencyRulesCommon,
+			$equivalencyRules[$idx],
 			$languageCode
 			);
 		$numbers = PhoneticNumbers($result);
@@ -177,6 +178,22 @@ abstract class BMPM {
 
 	function setApproxCommon($approxCommon) {
 		$this->_approxCommon = $approxCommon;
+	}
+
+	function getExact() {
+		return $this->_exact;
+	}
+
+	function setExact($exact) {
+		$this->_exact = $exact;
+	}
+
+	function getExactCommon() {
+		return $this->_exactCommon;
+	}
+
+	function setExactCommon($exactCommon) {
+		$this->_exactCommon = $exactCommon;
 	}
 
 	function getRules() {

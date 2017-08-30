@@ -29,11 +29,13 @@
   include "phoneticutils.php";
   include "phoneticengine.php";
   include "$type/approxcommon.php";
+  include "$type/exactcommon.php";
   include "$type/lang.php";
   include "dmsoundex.php";
 
   for ($i=0; $i<count($languages); $i++) {
     include "$type/rules" . $languages[$i] . ".php";
+    include "$type/exact" . $languages[$i] . ".php";
     include "$type/approx" . $languages[$i] . ".php";
   }
 

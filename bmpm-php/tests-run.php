@@ -90,22 +90,29 @@ while (($line = fgets($handle)) !== false) {
   }
   
   $comps = explode("\t", trim($line, "\n\r")); // some lines may have trailing tabs which we must keep
-  if (count($comps) != 5) {
+  if (count($comps) != 6) {
     echo "$inputFileName:" . $ln . " invalid line: " . $lines[$ln] . "\n";
     $fails++;
     continue;
   }
 
-  list($name, $typeName, $languageName, $bmpmExpected, $soundexExpected) = $comps;
+  list($name, $typeName, $languageName, $bmpmExactExpected, $bmpmApproxExpected, $soundexExpected) = $comps;
 
   if ($debug) {
     echo "$inputFileName:$ln [[$name $typeName $languageName]]\n";
   }
 
   try {
-    $bmpmActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName));
-    if ($bmpmActual != $bmpmExpected) {
-      echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName]]\n[[expected]] $bmpmExpected\n  [[actual]] $bmpmActual\n";
+    $bmpmApproxActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName), false);
+    if ($bmpmApproxActual != $bmpmApproxExpected) {
+      echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName approx]]\n[[expected]] $bmpmApproxExpected\n  [[actual]] $bmpmApproxActual\n";
+      $fails++;
+      beep();
+    }
+
+    $bmpmExactActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName), true);
+    if ($bmpmExactActual != $bmpmExactExpected) {
+      echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName exact]]\n[[expected]] $bmpmExactExpected\n  [[actual]] $bmpmExactActual\n";
       $fails++;
       beep();
     }

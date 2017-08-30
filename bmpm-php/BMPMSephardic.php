@@ -3,10 +3,13 @@
 class BMPMSephardic extends BMPM {
 	function __construct() {
 		$this->setType(BMPM::TYPE_SEPHARDIC);
+		
 		include "sep/approxcommon.php";
 		$this->setApproxCommon($approxCommon);
+		
 		include "sep/languagenames.php";
 		$this->setLanguageNames($languages);
+		
 		include "sep/lang.php";
 		$this->setAllLanguagesBitmap($all);
 		$this->setLanguageRules($languageRules);
@@ -28,6 +31,15 @@ class BMPMSephardic extends BMPM {
 		include "sep/approxportuguese.php";
 		include "sep/approxspanish.php";
 		$this->setApprox($approx);
+
+		$exact = array();
+		include "sep/exactany.php";
+		include "sep/exactfrench.php";
+		include "sep/exacthebrew.php";
+		include "sep/exactitalian.php";
+		include "sep/exactportuguese.php";
+		include "sep/exactspanish.php";
+		$this->setExact($exact);
 
 		return $this;
 	}
