@@ -7,6 +7,9 @@ class BMPMSephardic extends BMPM {
 		include "sep/approxcommon.php";
 		$this->setApproxCommon($approxCommon);
 		
+		include "sep/exactcommon.php";
+		$this->setExactCommon($exactCommon);
+
 		include "sep/languagenames.php";
 		$this->setLanguageNames($languages);
 		
