@@ -26,9 +26,11 @@
 
     // convert $input to utf8
     $input = utf8_encode($input); // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
+    /* // BK: This should be handled by the caller so it doesn't mess up results for names that contain ampersands
     if (strpos($input, "&") !== false) { // takes care of ampersand-notation encoding of unicode (&#...;)
       $input = html_entity_decode($input, ENT_NOQUOTES, "UTF-8");
     }
+    */
     return Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
 
