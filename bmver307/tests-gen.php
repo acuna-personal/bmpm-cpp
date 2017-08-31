@@ -27,7 +27,6 @@
   $type = $typeOrig; // gets changed by includes below....
   $_GET['type'] = $type;
 
-
   include "phoneticutils.php";
   include "phoneticengine.php";
   include "$type/approxcommon.php";
