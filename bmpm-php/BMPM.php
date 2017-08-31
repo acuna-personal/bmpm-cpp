@@ -109,6 +109,19 @@ abstract class BMPM {
 		$idx = LanguageIndexFromCode($languageCode, $languages);
 
 		//echo "$name => " . LanguageName($idx, $languages) . "\n";
+
+		if (!$equivalencyRules) {
+			echo "$name => " . LanguageName($idx, $languages) . "\n";
+			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
+			return null;
+		}
+
+		if (!$equivalencyRulesCommon) {
+			echo "$name => " . LanguageName($idx, $languages) . "\n";
+			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
+			return null;
+		}
+
 		if (!isset($rules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
 			echo "getPhoneticEncoding: No rules for ($name, $type, $language, $exact)\n";
