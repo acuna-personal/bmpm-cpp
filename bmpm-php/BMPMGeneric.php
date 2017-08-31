@@ -40,29 +40,6 @@ class BMPMGeneric extends BMPM {
 		include "gen/rulesturkish.php";
 		$this->setRules($rules);
 
-		$approx = array();
-		include "gen/approxany.php";
-		include "gen/approxarabic.php";
-		include "gen/approxcyrillic.php";
-		include "gen/approxczech.php";
-		include "gen/approxdutch.php";
-		include "gen/approxenglish.php";
-		include "gen/approxfrench.php";
-		include "gen/approxgerman.php";
-		include "gen/approxgreek.php";
-		include "gen/approxgreeklatin.php";
-		include "gen/approxhebrew.php";
-		include "gen/approxhungarian.php";
-		include "gen/approxitalian.php";
-		include "gen/approxlatvian.php";
-		include "gen/approxpolish.php";
-		include "gen/approxportuguese.php";
-		include "gen/approxromanian.php";
-		include "gen/approxrussian.php";
-		include "gen/approxspanish.php";
-		include "gen/approxturkish.php";
-		$this->setApprox($approx);
-
 		$exact = array();
 		include "gen/exactany.php";
 		include "gen/exactarabic.php";
@@ -86,6 +63,28 @@ class BMPMGeneric extends BMPM {
 		include "gen/exactturkish.php";
 		$this->setExact($exact);
 
+		$approx = array();
+		include "gen/approxany.php";
+		include "gen/approxarabic.php";
+		include "gen/approxcyrillic.php";
+		include "gen/approxczech.php";
+		include "gen/approxdutch.php";
+		include "gen/approxenglish.php";
+		include "gen/approxfrench.php";
+		include "gen/approxgerman.php";
+		include "gen/approxgreek.php";
+		include "gen/approxgreeklatin.php";
+		include "gen/approxhebrew.php";
+		include "gen/approxhungarian.php";
+		include "gen/approxitalian.php";
+		include "gen/approxlatvian.php";
+		include "gen/approxpolish.php";
+		include "gen/approxportuguese.php";
+		include "gen/approxromanian.php";
+		include "gen/approxrussian.php";
+		include "gen/approxspanish.php";
+		include "gen/approxturkish.php";
+		$this->setApprox($approx);
 
 		return $this;
 	}

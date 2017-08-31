@@ -21,10 +21,12 @@
    *
    */
 
+  $inputFileName = $argv[1];
+  $outputFileName = $argv[2];
   $typeOrig = $argv[3]; // ash, sep, or gen
   $type = $typeOrig; // gets changed by includes below....
   $_GET['type'] = $type;
-  $language = $argv[4];
+
 
   include "phoneticutils.php";
   include "phoneticengine.php";
@@ -39,9 +41,6 @@
     include "$type/exact" . $languages[$i] . ".php";
   }
 
-  $inputFileName = $argv[1];
-  $outputFileName = $argv[2];
-
   if (!($handle = fopen($outputFileName,"w"))) {
     echo "error opening $outputFileName\n";
     exit;
@@ -51,8 +50,7 @@
   
   $lines = file($inputFileName);
   for ($ln=0; $ln<count($lines); $ln++){
-if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n
-  ";
+if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "\n";
     $comps = explode("\t", trim($lines[$ln]));
     $name = $comps[0];
     $languageName = $comps[1];

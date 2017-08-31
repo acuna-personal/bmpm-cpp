@@ -29,22 +29,7 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/rulesromanian.php";
 		include "ash/rulesrussian.php";
 		include "ash/rulesspanish.php";
-
 		$this->setRules($rules);
-
-		$approx = array();
-		include "ash/approxany.php";
-		include "ash/approxcyrillic.php";
-		include "ash/approxenglish.php";
-		include "ash/approxfrench.php";
-		include "ash/approxgerman.php";
-		include "ash/approxhebrew.php";
-		include "ash/approxhungarian.php";
-		include "ash/approxpolish.php";
-		include "ash/approxromanian.php";
-		include "ash/approxrussian.php";
-		include "ash/approxspanish.php";
-		$this->setApprox($approx);
 
 		$exact = array();
 		include "ash/exactany.php";
@@ -59,6 +44,20 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/exactrussian.php";
 		include "ash/exactspanish.php";
 		$this->setExact($exact);
+
+		$approx = array();
+		include "ash/approxany.php";
+		include "ash/approxcyrillic.php";
+		include "ash/approxenglish.php";
+		include "ash/approxfrench.php";
+		include "ash/approxgerman.php";
+		include "ash/approxhebrew.php";
+		include "ash/approxhungarian.php";
+		include "ash/approxpolish.php";
+		include "ash/approxromanian.php";
+		include "ash/approxrussian.php";
+		include "ash/approxspanish.php";
+		$this->setApprox($approx);
 
 		return $this;
 	}

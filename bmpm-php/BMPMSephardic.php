@@ -23,15 +23,6 @@ class BMPMSephardic extends BMPM {
 		include "sep/rulesspanish.php";
 		$this->setRules($rules);
 
-		$approx = array();
-		include "sep/approxany.php";
-		include "sep/approxfrench.php";
-		include "sep/approxhebrew.php";
-		include "sep/approxitalian.php";
-		include "sep/approxportuguese.php";
-		include "sep/approxspanish.php";
-		$this->setApprox($approx);
-
 		$exact = array();
 		include "sep/exactany.php";
 		include "sep/exactfrench.php";
@@ -40,6 +31,15 @@ class BMPMSephardic extends BMPM {
 		include "sep/exactportuguese.php";
 		include "sep/exactspanish.php";
 		$this->setExact($exact);
+
+		$approx = array();
+		include "sep/approxany.php";
+		include "sep/approxfrench.php";
+		include "sep/approxhebrew.php";
+		include "sep/approxitalian.php";
+		include "sep/approxportuguese.php";
+		include "sep/approxspanish.php";
+		$this->setApprox($approx);
 
 		return $this;
 	}

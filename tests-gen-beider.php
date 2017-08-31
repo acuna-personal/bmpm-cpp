@@ -36,6 +36,7 @@ while (($line = fgets($handle)) !== false) {
 	list ($name, $phoneticExactRegex, $phoneticExact, $phoneticApproxRegex, $phoneticApprox, $phoneticHebrewRegex, $phoneticHebrew, $soundex) = $comps;
 
 	// Currently not testing Hebrew
+	// Currently don't understand expected results of multilingual tests ("spanish+german+polish+romanian")
 	if (count($languages) == 1) {
 		$languageName = $languages[0];
 		fputs($outputHandle, "$name\t$type\t$languageName\t$phoneticExact\t$phoneticApprox\t$soundex\n");
