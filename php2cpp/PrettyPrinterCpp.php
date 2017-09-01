@@ -77,6 +77,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $this->pDereferenceLhs($node->class) . '::' . $this->pObjectProperty($node->name);
 	}
 
+	protected function pExpr_ErrorSuppress(Expr\ErrorSuppress $node) {
+	    return $this->pPrefixOp('Expr_ErrorSuppress', '/* ORIG: @ */', $node->expr);
+	}
+
 	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
 		$tag = '';
 		if (null === $node->returnType) {
