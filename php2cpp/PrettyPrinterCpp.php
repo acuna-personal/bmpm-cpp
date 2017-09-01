@@ -22,7 +22,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 			if ($node->name == 'this') {
 				return 'this';
 			} else {
-			    return 's_' . $node->name; // without $
+			    return $node->name; // without $
 			}
 		}
 	}
