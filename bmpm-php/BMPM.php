@@ -118,7 +118,7 @@ abstract class BMPM {
 
 		if (!$equivalencyRulesCommon) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
+			echo "getPhoneticEncoding: No equivalencyRulesCommon for ($name, $type, $language, $exact)\n";
 			return null;
 		}
 
@@ -339,9 +339,7 @@ function remove_accents($string) {
     );
 
     $newString = strtr($string, $chars);
-    if ($newString != $string) {
-    	echo "$string => $newString\n";
-    }
+
     return $newString;
 }
 
