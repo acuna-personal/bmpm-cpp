@@ -103,6 +103,8 @@ while (($line = fgets($handle)) !== false) {
   }
 
   try {
+    // TODO: Order shouldn't matter for any of these
+    
     $bmpmApproxActual = BMPM::getPhoneticEncoding($name, typeForName($typeName), languageForName($languageName), false);
     if ($bmpmApproxActual != $bmpmApproxExpected) {
       echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName approx]]\n[[expected]] $bmpmApproxExpected\n  [[actual]] $bmpmApproxActual\n";
@@ -117,6 +119,7 @@ while (($line = fgets($handle)) !== false) {
       beep();
     }
 
+    $soundexExpected = trim($soundexExpected);
     $soundexActual = BMPM::getDaitchMotokoffSoundex($name);
     if ($soundexExpected != $soundexActual) {
       echo "$inputFileName:" . $ln . " BMPM::getDaitchMotokoffSoundex failed: [[$name]]\n[[expected]] $soundexExpected\n  [[actual]] $soundexActual\n";
