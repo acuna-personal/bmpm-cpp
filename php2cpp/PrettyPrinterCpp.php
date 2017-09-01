@@ -137,6 +137,21 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return 'pow(' . $this->pInfixOp('Expr_BinaryOp_Pow', $node->left, ', ', $node->right) . ') /* TODO: #include <math.h> */ ';
 	}
 
+	protected function pExpr_New(Expr\New_ $node) {
+	    if ($node->class instanceof Stmt\Class_) {
+	        $args = $node->args ? '(' . $this->pMaybeMultiline($node->args) . ')' : '';
+	        return '/* TODO: Mem mgmt */ new ' . $this->pClassCommon($node->class, $args);
+	    } else {
+		    return '/* TODO: Mem mgmt */ new ' . $this->p($node->class) . '(' . $this->pMaybeMultiline($node->args) . ')';
+		}
+	}
+
+	protected function pStmt_ClassConst(Stmt\ClassConst $node) {
+	    return $this->pModifiers($node->flags)
+	         . 'static const ' . $this->pCommaSeparated($node->consts) . ';';
+	}
+
+
 	/**** Helpers ****/
 
 	protected function pConvertExtension($pathInQuotes, $ext) {
