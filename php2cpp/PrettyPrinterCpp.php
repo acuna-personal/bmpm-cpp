@@ -73,6 +73,33 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $this->pDereferenceLhs($node->class) . '::' . $this->pObjectProperty($node->name);
 	}
 
+	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
+		$tag = '';
+		if (null === $node->returnType) {
+			$tag = "/* TODO: Fix return type */\n";
+		}
+	    return $tag
+	         . $this->pModifiers($node->flags)
+	         . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
+ 	         . ($node->byRef ? '&' : '') . $node->name
+	         . '(' . $this->pCommaSeparated($node->params) . ');'
+	         . (null !== $node->stmts
+	            ? "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}'
+	            : ';');
+	}
+
+	protected function pStmt_Function(Stmt\Function_ $node) {
+		$tag = '';
+		if (null === $node->returnType) {
+			$tag = "/* TODO: Fix return type */\n";
+		}
+	    return $tag
+		     . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
+	    	 . ($node->byRef ? '&' : '') . $node->name
+	         . '(' . $this->pCommaSeparated($node->params) . ');'
+	         . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
+	}
+
 	protected function pExpr_Include(Expr\Include_ $node) {
 	    static $map = [
 	        Expr\Include_::TYPE_INCLUDE      => 'include',
@@ -89,6 +116,16 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    $str .= "#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
 	    return $str;
 	}
+
+	protected function pExpr_BinaryOp_Identical(BinaryOp\Identical $node) {
+	    return $this->pInfixOp('Expr_BinaryOp_Identical', $node->left, ' == /* ORIG: === */ ', $node->right);
+	}
+
+	protected function pExpr_BinaryOp_NotIdentical(BinaryOp\NotIdentical $node) {
+	    return $this->pInfixOp('Expr_BinaryOp_NotIdentical', $node->left, ' != /* ORIG: !== */ ', $node->right);
+	}
+
+	/**** Helpers ****/
 
 	protected function pConvertExtension($pathInQuotes, $ext) {
 		return preg_replace("/\.php\"$/", ".$ext\"", $pathInQuotes);
