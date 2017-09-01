@@ -28,7 +28,8 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
-	    return $this->pModifiers($node->flags)
+		$flags = $this->pModifiers($node->flags);
+	    return ($flags ? '/* TODO: ' . $flags . ' */ ' : '') // not supported for C++ classes
 	    . 'class' . $afterClassToken
 	    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
 	    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
