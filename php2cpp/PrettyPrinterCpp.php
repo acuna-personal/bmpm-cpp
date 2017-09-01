@@ -17,7 +17,7 @@ use PhpParser\PrettyPrinterAbstract;
 class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	protected function pExpr_Variable(Expr\Variable $node) {
 		if ($node->name instanceof Expr) {
-		    return 's_{' . $this->p($node->name) . '}';
+		    return '${' . $this->p($node->name) . '}'; // TODO
 		} else {
 			if ($node->name == 'this') {
 				return 'this';
@@ -25,6 +25,12 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 			    return $node->name; // without $
 			}
 		}
+	}
+
+	// Class ivars
+	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
+	    return $node->name // without $
+	         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
 	}
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
