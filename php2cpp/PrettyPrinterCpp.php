@@ -19,7 +19,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		if ($node->name instanceof Expr) {
 		    return 's_{' . $this->p($node->name) . '}';
 		} else {
-			if ($node->name == '$this') {
+			if ($node->name == 'this') {
 				return 'this';
 			} else {
 			    return 's_' . $node->name; // without $
