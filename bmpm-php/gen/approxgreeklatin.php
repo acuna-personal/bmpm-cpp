@@ -31,5 +31,7 @@
 
   $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
 
+  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+
   
 ?>
