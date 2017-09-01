@@ -79,7 +79,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pStmt_Echo(Stmt\Echo_ $node) {
-	    return 'cout << ' . $this->pStreamSeparated($node->exprs) . ';';
+	    return 'std::cout << ' . $this->pStreamSeparated($node->exprs) . ';';
 	}
 
 	protected function pStreamSeparated(array $nodes) {
