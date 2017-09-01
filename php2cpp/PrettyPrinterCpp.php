@@ -76,11 +76,12 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	        Expr\Include_::TYPE_REQUIRE_ONCE => 'require_once',
 	    ];
 
-	    return '/* ORIG: ' . $map[$node->type] . " */\n#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
+	    return '/* ORIG: ' . $map[$node->type] . " */\n"
+	    	. "#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
 	}
 
-	protected function pConvertExtension($path, $ext) {
-		return preg_replace("/\.php$/", $ext, $path);
+	protected function pConvertExtension($pathInQuotes, $ext) {
+		return preg_replace("/\.php\"$/", ".$ext\"", $pathInQuotes);
 	}
 
 	// TODO: Copy and paste of private methods so we have access
