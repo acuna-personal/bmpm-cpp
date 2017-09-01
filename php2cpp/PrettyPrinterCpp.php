@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\PrettyPrinterAbstract;
 
 class PrettyPrinterCpp extends PrettyPrinter\Standard {
+
 	protected function pExpr_Variable(Expr\Variable $node) {
 		if ($node->name instanceof Expr) {
 		    return '${' . $this->p($node->name) . '}'; // TODO
@@ -66,6 +67,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pExpr_BinaryOp_Concat(BinaryOp\Concat $node) {
 	    return $this->pInfixOp('Expr_BinaryOp_Concat', $node->left, ' + ', $node->right);
+	}
+
+	protected function pExpr_StaticPropertyFetch(Expr\StaticPropertyFetch $node) {
+	    return $this->pDereferenceLhs($node->class) . '::' . $this->pObjectProperty($node->name);
 	}
 
 	protected function pExpr_Include(Expr\Include_ $node) {
