@@ -35,7 +35,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
 		$flags = $this->pModifiers($node->flags);
-	    return ($flags ? '/* TODO: ' . $flags . ' */ ' : '') // not supported for C++ classes
+	    return ($flags ? '/* ORIG: ' . $flags . ' */ ' : '') // not supported for C++ classes
 	    . 'class' . $afterClassToken
 	    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
 	    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
@@ -66,6 +66,21 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pExpr_BinaryOp_Concat(BinaryOp\Concat $node) {
 	    return $this->pInfixOp('Expr_BinaryOp_Concat', $node->left, ' + ', $node->right);
+	}
+
+	protected function pExpr_Include(Expr\Include_ $node) {
+	    static $map = [
+	        Expr\Include_::TYPE_INCLUDE      => 'include',
+	        Expr\Include_::TYPE_INCLUDE_ONCE => 'include_once',
+	        Expr\Include_::TYPE_REQUIRE      => 'require',
+	        Expr\Include_::TYPE_REQUIRE_ONCE => 'require_once',
+	    ];
+
+	    return '/* ORIG: ' . $map[$node->type] . " */\n#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
+	}
+
+	protected function pConvertExtension($path, $ext) {
+		return preg_replace("/\.php$/", $ext, $path);
 	}
 
 	// TODO: Copy and paste of private methods so we have access
