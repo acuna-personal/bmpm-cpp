@@ -76,8 +76,13 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	        Expr\Include_::TYPE_REQUIRE_ONCE => 'require_once',
 	    ];
 
-	    return '/* ORIG: ' . $map[$node->type] . " */\n"
-	    	. "#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
+	    $str = '';
+	    if ($node->type == Expr\Include_::TYPE_INCLUDE_ONCE
+	    	|| $node->type == Expr\Include_::TYPE_REQUIRE_ONCE) {
+	    	$str .= '/* ORIG: ' . $map[$node->type] . " */\n";
+	    }
+	    $str .= "#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
+	    return $str;
 	}
 
 	protected function pConvertExtension($pathInQuotes, $ext) {
