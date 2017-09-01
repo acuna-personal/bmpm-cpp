@@ -69,6 +69,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $this->pInfixOp('Expr_BinaryOp_Concat', $node->left, ' + ', $node->right);
 	}
 
+	protected function pExpr_AssignOp_Concat(AssignOp\Concat $node) {
+	    return $this->pInfixOp('Expr_AssignOp_Concat', $node->var, ' += ', $node->expr);
+	}
+
 	protected function pExpr_StaticPropertyFetch(Expr\StaticPropertyFetch $node) {
 	    return $this->pDereferenceLhs($node->class) . '::' . $this->pObjectProperty($node->name);
 	}
