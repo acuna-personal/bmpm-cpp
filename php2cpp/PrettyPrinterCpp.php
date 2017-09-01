@@ -27,6 +27,15 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		}
 	}
 
+	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
+	    return $this->pModifiers($node->flags)
+	    . 'class' . $afterClassToken
+	    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
+	    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
+	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
+	}
+
+
 	protected function pExpr_Array(Expr\Array_ $node) {
 	    return '{' . $this->pMaybeMultiline($node->items, true) . '}';
 	}
