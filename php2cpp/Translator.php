@@ -54,7 +54,7 @@ class Translator {
 				$outPath = $fileParts[1] . '.cpp';
 
 				$stmts = $this->translationForCode($input);
-				$output = $this->_prettyPrinter->prettyPrintFile($stmts);
+				$output = $this->_prettyPrinter->prettyPrint($stmts);
 			} else {
 				$output = $input;
 			}

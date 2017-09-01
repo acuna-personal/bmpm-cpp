@@ -22,9 +22,44 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 			if ($node->name == '$this') {
 				return 'this';
 			} else {
-			    return $node->name; // without $
+			    return 's_' . $node->name; // without $
 			}
 		}
+	}
+
+	protected function pExpr_Array(Expr\Array_ $node) {
+	    return '{' . $this->pMaybeMultiline($node->items, true) . '}';
+	}
+
+	protected function pStmt_Echo(Stmt\Echo_ $node) {
+	    return 'cout << ' . $this->pStreamSeparated($node->exprs) . ';';
+	}
+
+	protected function pStreamSeparated(array $nodes) {
+	    return $this->pImplode($nodes, ' << ');
+	}
+
+	protected function pExpr_BinaryOp_Concat(BinaryOp\Concat $node) {
+	    return $this->pInfixOp('Expr_BinaryOp_Concat', $node->left, ' + ', $node->right);
+	}
+
+	// TODO: Copy and paste of private methods so we have access
+
+	protected function hasNodeWithComments(array $nodes) {
+	    foreach ($nodes as $node) {
+	        if ($node && $node->getAttribute('comments')) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	protected function pMaybeMultiline(array $nodes, $trailingComma = false) {
+	    if (!$this->hasNodeWithComments($nodes)) {
+	        return $this->pCommaSeparated($nodes);
+	    } else {
+	        return $this->pCommaSeparatedMultiline($nodes, $trailingComma) . "\n";
+	    }
 	}
 }
 
