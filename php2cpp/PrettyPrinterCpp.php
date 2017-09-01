@@ -125,6 +125,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $this->pInfixOp('Expr_BinaryOp_NotIdentical', $node->left, ' != /* ORIG: !== */ ', $node->right);
 	}
 
+	protected function pExpr_BinaryOp_Pow(BinaryOp\Pow $node) {
+	    return 'pow(' . $this->pInfixOp('Expr_BinaryOp_Pow', $node->left, ', ', $node->right) . ') /* TODO: #include <math.h> */ ';
+	}
+
 	/**** Helpers ****/
 
 	protected function pConvertExtension($pathInQuotes, $ext) {
