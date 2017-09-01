@@ -43,6 +43,27 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
 	}
 
+	protected function p(Node $node) {
+		$s = parent::p($node);
+		/*
+		// For debugging
+		if ($s == "false") {
+			print_r($node);
+		}
+		*/
+		return $s;
+	}
+
+	protected function pExpr_ConstFetch(Expr\ConstFetch $node) {
+		$str = $this->p($node->name);
+		$strLower = strtolower($str);
+		if ($strLower == "true" || $strLower == "false") {
+			return $strLower;
+		} else {
+		    return $str;
+		}
+	}
+
 	protected function pExpr_MethodCall(Expr\MethodCall $node) {
 		$lhs = $this->pDereferenceLhs($node->var);
 		$operator = '.';
