@@ -42,6 +42,15 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
 	}
 
+	protected function pExpr_MethodCall(Expr\MethodCall $node) {
+		$lhs = $this->pDereferenceLhs($node->var);
+		$operator = '.';
+		if ($lhs == 'this') {
+			$operator = '->'; // this is a pointer in C++
+		}
+	    return $lhs . $operator . $this->pObjectProperty($node->name)
+	         . '(' . $this->pMaybeMultiline($node->args) . ')';
+	}
 
 	protected function pExpr_Array(Expr\Array_ $node) {
 	    return '{' . $this->pMaybeMultiline($node->items, true) . '}';
