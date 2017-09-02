@@ -154,23 +154,23 @@ abstract class BMPM {
 		return trim(soundx_name(remove_accents($name)));
 	}
 
-	function getType() {
+	public function getType() {
 		return $this->_type;
 	}
 
-	function setType($type) {
+	public function setType($type) {
 		$this->_type = $type;
 	}
 
-	function getLanguageNames() {
+	public function getLanguageNames() {
 		return $this->_languageNames;
 	}
 
-	function setLanguageNames($languageNames) {
+	public function setLanguageNames($languageNames) {
 		$this->_languageNames = $languageNames;
 	}
 
-	function handlesLanguage($language) {
+	public function handlesLanguage($language) {
 		if ($this->_languageNames == null) {
 			echo "handlesLanguage: Null languages list\n";
 			debug_print_backtrace();
@@ -179,59 +179,59 @@ abstract class BMPM {
 		return in_array($language, $this->_languageNames);
 	}
 
-	function getApprox() {
+	public function getApprox() {
 		return $this->_approx;
 	}
 
-	function setApprox($approx) {
+	public function setApprox($approx) {
 		$this->_approx = $approx;
 	}
 
-	function getApproxCommon() {
+	public function getApproxCommon() {
 		return $this->_approxCommon;
 	}
 
-	function setApproxCommon($approxCommon) {
+	public function setApproxCommon($approxCommon) {
 		$this->_approxCommon = $approxCommon;
 	}
 
-	function getExact() {
+	public function getExact() {
 		return $this->_exact;
 	}
 
-	function setExact($exact) {
+	public function setExact($exact) {
 		$this->_exact = $exact;
 	}
 
-	function getExactCommon() {
+	public function getExactCommon() {
 		return $this->_exactCommon;
 	}
 
-	function setExactCommon($exactCommon) {
+	public function setExactCommon($exactCommon) {
 		$this->_exactCommon = $exactCommon;
 	}
 
-	function getRules() {
+	public function getRules() {
 		return $this->_rules;
 	}
 
-	function setRules($rules) {
+	public function setRules($rules) {
 		$this->_rules = $rules;
 	}
 
-	function getLanguageRules() {
+	public function getLanguageRules() {
 		return $this->_languageRules;
 	}
 
-	function setLanguageRules($languageRules) {
+	public function setLanguageRules($languageRules) {
 		$this->_languageRules = $languageRules;
 	}
 
-	function getAllLanguagesBitmap() {
+	public function getAllLanguagesBitmap() {
 		return $this->_allLanguagesBitmap;
 	}
 
-	function setAllLanguagesBitmap($allLanguagesBitmap) {
+	public function setAllLanguagesBitmap($allLanguagesBitmap) {
 		$this->_allLanguagesBitmap = $allLanguagesBitmap;
 	}
 }
