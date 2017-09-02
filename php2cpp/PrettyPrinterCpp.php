@@ -40,7 +40,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    . 'class' . $afterClassToken
 	    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
 	    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
-	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
+	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '};';
 	}
 
 	protected function p(Node $node) {
