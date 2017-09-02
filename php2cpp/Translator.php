@@ -48,24 +48,36 @@ class Translator {
 			$outPath = $outputDirectory . '/' . substr($inPath, strpos($inPath, '/') + 1);
 			echo "in=$inPath out=$outPath\n";
 			$input = file_get_contents($inPath);
-			$output = '';
 
 			if (preg_match("/^(.*)\.php$/", $outPath, $fileParts)) {
-				$outPath = $fileParts[1] . '.cpp';
+				$stmts = $this->stmtsForCode($input);
 
-				$stmts = $this->translationForCode($input);
-				$output = $this->_prettyPrinter->prettyPrint($stmts);
+				// .h
+				$outPathH = $fileParts[1] . '.h';
+				$this->_prettyPrinter->headersOnly = true;
+				$outputH = $this->_prettyPrinter->prettyPrint($stmts);
+				$this->_writeFile($outPathH, $outputH);				
+
+				// .cpp
+				$outPathCpp = $fileParts[1] . '.cpp';
+				$this->_prettyPrinter->headersOnly = false;
+				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
+				$outputCpp = '#include <' . basename($outPathH) . ">\n\n" . $outputCpp;
+				$this->_writeFile($outPathCpp, $outputCpp);
+
 			} else {
 				$output = $input;
+				$this->_writeFile($outPath, $output);
 			}
-
-			@mkdir(dirname($outPath), 0755, true); // $path is a file
-
-			file_put_contents($outPath, $output);
 		}
 	}
 
-	function translationForCode($code) {
+	protected function _writeFile($outPath, $output) {
+		@mkdir(dirname($outPath), 0755, true); // $path is a file
+		return file_put_contents($outPath, $output);
+	}
+
+	function stmtsForCode($code) {
 		$stmts = null;
 
 		try {
