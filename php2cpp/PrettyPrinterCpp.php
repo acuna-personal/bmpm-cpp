@@ -18,17 +18,40 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	public $headersOnly = false;
 
 	protected function pExpr_Variable(Expr\Variable $node) {
+		$str = '';
 		if ($node->name instanceof Expr) {
-		    return '${' . $this->p($node->name) . '}'; // TODO
+		    $str .= '${' . $this->p($node->name) . '}'; // TODO
 		} else {
 			if ($node->name == 'this') {
-				return 'this';
+				$str .= 'this';
 			} else {
-			    return $node->name; // without $
+				$parent = $node->getAttribute('parent');
+				/*
+			    if (!$this->containsName($parent, $node->name, $parent)) {
+			    	$str .= '/* first use */ ';
+			    }
+			    */
+				$str .= $node->name; // without $
 			}
 		}
+		return $str;
 	}
-
+/*
+	protected function containsName(&$node, $name, &$originalNode) {
+		if (isset($node->stmts)) {
+			foreach ($node->stmts as $n) {
+				if ($n != $originalNode && isset($node->name) && $node->name == $name && $n->name == $name) {
+					return true;
+				} else if (isset($n->stmts) && $this->containsName($n, $name, $originalNode)) {
+					return true;
+				}
+			}
+		} else if (isset($node->name) && $node->name == $name) {
+			return true;
+		}
+		return false;
+	}
+*/
 	// Class ivars
 	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
 	    return $node->name // without $
@@ -137,9 +160,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function typeForFuncoid($node) {
-		echo $node->name . "\n";
 		if (!$this->containsReturn($node->stmts)) {
-			echo $node->name . " contains no return\n";
 			$type = 'void ';
 		} else {
 			$type = (null !== $node->returnType ? $this->p($node->returnType) : '/* TODO: Fix type */ void* '); // user will fix manually
@@ -150,8 +171,6 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	protected function containsReturn($nodes) {
 		foreach ($nodes as $node) {
 		    if ($node instanceof Stmt\Return_ && null !== $node->expr) {
-		    	echo "- found return: ";
-		    	print_r($node);
 		        return true;
 		    } else if (isset($node->stmts) && $this->containsReturn($node->stmts)) {
 		    	return true;
