@@ -67,12 +67,27 @@ class Translator {
 				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
 				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n" . $outputCpp;
 				$this->_writeFile($outPathCpp, $outputCpp);
-
 			} else {
 				$output = $input;
 				$this->_writeFile($outPath, $output);
 			}
 		}
+
+		$definedFunctions = $this->_prettyPrinter->definedFunctions;
+		$calledFunctions = $this->_prettyPrinter->calledFunctions;
+		$undefinedFunctions = array();
+		echo "defined:\n";
+		print_r($undefinedFunctions);
+		echo "Called:\n";
+		print_r($calledFunctions);
+		foreach ($calledFunctions as $func) {
+			$idx = array_search($func, $definedFunctions);
+			if ($idx === false) {
+				array_push($undefinedFunctions, $func);
+			}
+		}
+
+		print_r($undefinedFunctions);
 	}
 
 	protected function _writeFile($outPath, $output) {

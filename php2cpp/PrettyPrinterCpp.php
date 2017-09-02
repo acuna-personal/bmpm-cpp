@@ -16,7 +16,8 @@ use PhpParser\PrettyPrinterAbstract;
 
 class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	public $headersOnly = false;
-	public $undefinedFunctions = array();
+	public $definedFunctions = array();
+	public $calledFunctions = array();
 
 	protected function pExpr_Variable(Expr\Variable $node) {
 		$str = '';
@@ -166,8 +167,8 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	protected function pStmt_Function(Stmt\Function_ $node) {
 		$tag = '';
 
-		if ($idx = (array_search($node->name, $this->undefinedFunctions) !== FALSE) {
-			unset($this->undefinedFunctions[$idx];
+		if ($node->name && !in_array('' . $node->name, $this->definedFunctions)) {
+			array_push($this->definedFunctions, '' . $node->name);
 		}
 
 	    return $tag
@@ -178,8 +179,8 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pExpr_FuncCall(Expr\FuncCall $node) {
-		if (in_array($node->name, $this->undefinedFunctions)) {
-			array_push($this->undefinedFunctions, $node->name);
+		if ($node->name && !in_array('' . $node->name, $this->calledFunctions)) {
+			array_push($this->calledFunctions, '' . $node->name);
 		}
 	    return parent::pExpr_FuncCall($node);
 	}

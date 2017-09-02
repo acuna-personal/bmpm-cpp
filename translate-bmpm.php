@@ -10,12 +10,13 @@ use PhpParser\ParserFactory;
 
 $inputDirectory = 'bmpm-php';
 $outputDirectory = 'bmpm-cpp';
+/*
 system('rm -rf ' . escapeshellarg($outputDirectory), $retval);
 if ($retval) {
 	echo "Unable to remove output directory";
 	exit(1);
 }
-
+*/
 $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7); // a "reasonable default"
 $prettyPrinter = new PrettyPrinterCpp();
 
