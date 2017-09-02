@@ -277,6 +277,19 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $str;
 	}
 
+	protected function pEncapsList(array $encapsList, $quote) {
+	    $return = '';
+	    foreach ($encapsList as $element) {
+	        if ($element instanceof Scalar\EncapsedStringPart) {
+	            $return .= $this->escapeString($element->value, $quote);
+	        } else {
+
+	            $return .= '" + std::to_string(' . $this->p($element) . ') + "';
+	        }
+	    }
+
+	    return $return;
+	}
 
 	/**** Helpers ****/
 
