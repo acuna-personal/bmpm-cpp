@@ -302,9 +302,9 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function escapeString($string, $quote) {
-		$str = parent::escapeString($string, $quote);
-		$str = preg_replace('/\$/', '$', $string); // don't escape $ in C++
-		return $str;
+		$string = parent::escapeString($string, $quote);
+		$string = preg_replace('/\$/', '$', $string); // don't escape $ in C++
+		return $string;
 	}
 
 	/**** Helpers ****/
