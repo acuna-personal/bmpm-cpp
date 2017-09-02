@@ -101,7 +101,10 @@ class Translator {
 	}
 
 	protected function preProcess($php, $outPath) {
-		$php = preg_replace('~/\*\*\*IFNCPP\*\*\*/(.+)/\*\*\*ENDIFNCPP\*\*\*/~sm', '', $php);
+		$php = preg_replace('~/\*\*\*IFNCPP\*\*\*/(.+?)/\*\*\*ENDIFNCPP\*\*\*/~sm', '', $php);
+		if (basename($outPath) == "tests-run.php") {
+			echo "$php\n";
+		}
 		return $php;
 	}
 

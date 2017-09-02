@@ -260,7 +260,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pStmt_ClassConst(Stmt\ClassConst $node) {
 	    return $this->pModifiers($node->flags)
-	         . ($this->headersOnly ? 'static ' : '') . 'const ' . $this->pCommaSeparated($node->consts) . ';';
+	         . ($this->headersOnly ? 'public: static ' : '') . 'const ' . $this->pCommaSeparated($node->consts) . ';';
 	}
 
 	protected function pConst(Node\Const_ $node) {
