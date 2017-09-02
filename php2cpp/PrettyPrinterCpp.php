@@ -291,6 +291,12 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $return;
 	}
 
+	protected function escapeString($string, $quote) {
+		$str = parent::escapeString($string, $quote);
+		$str = preg_replace('/\$/', '$', $string); // don't escape $ in C++
+		return $str;
+	}
+
 	/**** Helpers ****/
 
 	protected function pConvertExtension($pathInQuotes, $ext) {
