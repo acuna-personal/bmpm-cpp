@@ -56,7 +56,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pParam(Node\Param $node) {
-		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Add type */');
+		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Fix type */ void');
 	    return $type . ' '
 	         . ($node->byRef ? '&' : '')
 	         . ($node->variadic ? '...' : '')
@@ -117,7 +117,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
 		$tag = '';
 		if (null === $node->returnType) {
-			$tag = "/* TODO: Fix return type */\n";
+			$tag = "/* TODO: Fix type */ ";
 		}
 	    return $tag
 	         . $this->pModifiers($node->flags)
@@ -132,7 +132,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	protected function pStmt_Function(Stmt\Function_ $node) {
 		$tag = '';
 		if (null === $node->returnType) {
-			$tag = "/* TODO: Fix return type */\n";
+			$tag = "/* TODO: Fix type */ ";
 		}
 	    return $tag
 		     . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
