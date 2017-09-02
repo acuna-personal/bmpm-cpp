@@ -55,15 +55,6 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		return $s;
 	}
 
-	protected function pParam(Node\Param $node) {
-		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Fix type */ void');
-	    return $type . ' '
-	         . ($node->byRef ? '&' : '')
-	         . ($node->variadic ? '...' : '')
-	         . $node->name
-	         . ($node->default ? ' = ' . $this->p($node->default) : '');
-	}
-
 	protected function pExpr_ConstFetch(Expr\ConstFetch $node) {
 		$str = $this->p($node->name);
 		$strLower = strtolower($str);
@@ -114,14 +105,20 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $this->pPrefixOp('Expr_ErrorSuppress', '/* ORIG: @ */', $node->expr);
 	}
 
+	protected function pParam(Node\Param $node) {
+		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Fix type */ void*');
+	    return $type . ' '
+	         . ($node->byRef ? '&' : '')
+	         . ($node->variadic ? '...' : '')
+	         . $node->name
+	         . ($node->default ? ' = ' . $this->p($node->default) : '');
+	}
+
 	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
 		$tag = '';
-		if (null === $node->returnType) {
-			$tag = "/* TODO: Fix type */ ";
-		}
 	    return $tag
 	         . $this->pModifiers($node->flags)
-	         . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
+	         . $this->typeForFuncoid($node)
  	         . ($node->byRef ? '&' : '') . $node->name
 	         . '(' . $this->pCommaSeparated($node->params) . ');'
 	         . (null !== $node->stmts && !$this->headersOnly
@@ -131,14 +128,36 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pStmt_Function(Stmt\Function_ $node) {
 		$tag = '';
-		if (null === $node->returnType) {
-			$tag = "/* TODO: Fix type */ ";
-		}
+
 	    return $tag
-		     . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
+		     . $this->typeForFuncoid($node)
 	    	 . ($node->byRef ? '&' : '') . $node->name
 	         . '(' . $this->pCommaSeparated($node->params) . ');'
 	         . ($this->headersOnly ? '' : "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}');
+	}
+
+	protected function typeForFuncoid($node) {
+		echo $node->name . "\n";
+		if (!$this->containsReturn($node->stmts)) {
+			echo $node->name . " contains no return\n";
+			$type = 'void ';
+		} else {
+			$type = (null !== $node->returnType ? $this->p($node->returnType) : '/* TODO: Fix type */ void* '); // user will fix manually
+		}
+		return $type;
+	}
+
+	protected function containsReturn($nodes) {
+		foreach ($nodes as $node) {
+		    if ($node instanceof Stmt\Return_ && null !== $node->expr) {
+		    	echo "- found return: ";
+		    	print_r($node);
+		        return true;
+		    } else if (isset($node->stmts) && $this->containsReturn($node->stmts)) {
+		    	return true;
+		    }
+		}
+		return false;
 	}
 
 	protected function pExpr_Include(Expr\Include_ $node) {
