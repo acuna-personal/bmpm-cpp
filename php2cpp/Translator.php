@@ -18,7 +18,8 @@ class Translator {
 		$this->_prettyPrinter = $prettyPrinter;
 		$this->_includes = ''
 			. "#include <iostream>\n"
-			. "#include <string>";
+			. "#include <string>\n"
+			. "#include <cstdio>";
 	}
 
 	function translate($inputDirectory, $outputDirectory) {
