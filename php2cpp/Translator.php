@@ -99,7 +99,13 @@ class Translator {
 	}
 
 	protected function _postProcess($cpp) {
+		// Remove ; after #includes
 		$cpp = preg_replace('/(#include "(.*)");/', '$1', $cpp);
+
+		// Remove ; on empty line from omitted statements
+		$cpp = preg_replace('/^\s*;\n/m', '', $cpp);
+
+		// Add basic includes that are dependencies for any translated code
 		$cpp = $this->_includes . "\n\n" . $cpp;
 		return $cpp;
 	}

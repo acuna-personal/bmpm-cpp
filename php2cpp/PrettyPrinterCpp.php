@@ -56,8 +56,12 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 */
 	// Class ivars
 	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
-	    return $node->name // without $
-	         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
+		if ($this->headersOnly) {
+		    return $node->name // without $
+		         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
+	     } else {
+	     	return '';
+	     }
 	}
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
