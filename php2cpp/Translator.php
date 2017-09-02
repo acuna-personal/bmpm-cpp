@@ -3,6 +3,9 @@
 require 'vendor/autoload.php';
 
 use PhpParser\ParserFactory;
+use PhpParser\NodeTraverser;
+use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 
 class Translator {
 	private $_ignores = null;
@@ -62,7 +65,7 @@ class Translator {
 				$outPathCpp = $fileParts[1] . '.cpp';
 				$this->_prettyPrinter->headersOnly = false;
 				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
-				$outputCpp = '#include <' . basename($outPathH) . ">\n\n" . $outputCpp;
+				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n" . $outputCpp;
 				$this->_writeFile($outPathCpp, $outputCpp);
 
 			} else {
@@ -82,6 +85,12 @@ class Translator {
 
 		try {
 		    $stmts = $this->_parser->parse($code);
+
+		    $traverser = new NodeTraverser;
+		    $traverser->addVisitor(new ParentConnector);
+
+		    $stmts = $traverser->traverse($stmts);
+
 		    // $stmts is an array of statement nodes
 		} catch (Error $e) {
 		    echo 'Parse Error: ', $e->getMessage();
@@ -99,6 +108,26 @@ class Translator {
 	function getIgnores() {
 		return $this->_ignores;
 	}
+}
+
+
+/*** https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-parent-of-a-node-be-obtained ***/
+
+
+class ParentConnector extends NodeVisitorAbstract {
+    private $stack;
+    public function beforeTraverse(array $nodes) {
+        $this->stack = [];
+    }
+    public function enterNode(Node $node) {
+        if (!empty($this->stack)) {
+            $node->setAttribute('parent', $this->stack[count($this->stack)-1]);
+        }
+        $this->stack[] = $node;
+    }
+    public function leaveNode(Node $node) {
+        array_pop($this->stack);
+    }
 }
 
 ?>
