@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\PrettyPrinterAbstract;
 
 class PrettyPrinterCpp extends PrettyPrinter\Standard {
+	public $headersOnly = false;
 
 	protected function pExpr_Variable(Expr\Variable $node) {
 		if ($node->name instanceof Expr) {
@@ -123,9 +124,9 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	         . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
  	         . ($node->byRef ? '&' : '') . $node->name
 	         . '(' . $this->pCommaSeparated($node->params) . ');'
-	         . (null !== $node->stmts
+	         . (null !== $node->stmts && !$this->headersOnly
 	            ? "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}'
-	            : ';');
+	            : '');
 	}
 
 	protected function pStmt_Function(Stmt\Function_ $node) {
@@ -137,7 +138,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		     . (null !== $node->returnType ? $this->p($node->returnType) : 'void ') // user will fix manually
 	    	 . ($node->byRef ? '&' : '') . $node->name
 	         . '(' . $this->pCommaSeparated($node->params) . ');'
-	         . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}';
+	         . ($this->headersOnly ? '' : "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}');
 	}
 
 	protected function pExpr_Include(Expr\Include_ $node) {
@@ -180,7 +181,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pStmt_ClassConst(Stmt\ClassConst $node) {
 	    return $this->pModifiers($node->flags)
-	         . 'static const ' . $this->pCommaSeparated($node->consts) . ';';
+	         . ($this->headersOnly ? 'static ' : '') . 'const ' . $this->pCommaSeparated($node->consts) . ';';
 	}
 
 	protected function pConst(Node\Const_ $node) {
@@ -190,8 +191,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		}
 		
 		$str .= $node->name;
-		$str .= ' = ';
-		$str .= $this->p($node->value);
+		if (!$this->headersOnly) {
+			$str .= ' = ';
+			$str .= $this->p($node->value);
+		}
 	    return $str;
 	}
 
