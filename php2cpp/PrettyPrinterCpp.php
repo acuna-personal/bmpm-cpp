@@ -149,6 +149,19 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	            : '');
 	}
 
+	protected function pModifiers($modifiers) {
+		if ($this->headersOnly) {
+		    return ($modifiers & Stmt\Class_::MODIFIER_PUBLIC    ? 'public: '    : '')
+		         . ($modifiers & Stmt\Class_::MODIFIER_PROTECTED ? 'protected: ' : '')
+		         . ($modifiers & Stmt\Class_::MODIFIER_PRIVATE   ? 'private: '   : '')
+		         . ($modifiers & Stmt\Class_::MODIFIER_STATIC    ? 'static '    : '')
+		         . ($modifiers & Stmt\Class_::MODIFIER_ABSTRACT  ? 'abstract '  : '')
+		         . ($modifiers & Stmt\Class_::MODIFIER_FINAL     ? 'final '     : '');
+		} else {
+			return '';
+		}
+	}
+
 	protected function pStmt_Function(Stmt\Function_ $node) {
 		$tag = '';
 
