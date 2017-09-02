@@ -205,7 +205,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    	|| $node->type == Expr\Include_::TYPE_REQUIRE_ONCE) {
 	    	$str .= '/* ORIG: ' . $map[$node->type] . " */\n";
 	    }
-	    $str .= "#include " . $this->pConvertExtension($this->p($node->expr), 'cpp');
+	    $str .= "#include " . $this->pConvertExtension($this->p($node->expr), 'h');
 	    return $str;
 	}
 
