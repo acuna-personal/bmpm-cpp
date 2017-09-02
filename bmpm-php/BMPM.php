@@ -7,7 +7,7 @@ include_once "phoneticengine.php";
 include_once "languages.php";
 
 abstract class BMPM {
-	const TYPE_SEPHARDIC = "sep";
+	const TYPE_SEPHARDIC = 'sep';
 	const TYPE_ASHKENAZI = "ash";
 	const TYPE_GENERIC = "gen";
 

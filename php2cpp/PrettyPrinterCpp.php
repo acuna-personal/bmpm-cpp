@@ -277,6 +277,16 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $str;
 	}
 
+	protected function pScalar_String(Scalar\String_ $node) {
+		// Single quotes is just for chars in C++
+		$kind = $node->getAttribute('kind', Scalar\String_::KIND_SINGLE_QUOTED);
+		if ($kind == Scalar\String_::KIND_SINGLE_QUOTED && strlen($node->value) != 1) {
+            $node->setAttribute('kind', Scalar\String_::KIND_DOUBLE_QUOTED);
+		}
+
+		return parent::pScalar_String($node);
+	}
+
 	protected function pEncapsList(array $encapsList, $quote) {
 	    $return = '';
 	    foreach ($encapsList as $element) {
