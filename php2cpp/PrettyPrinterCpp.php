@@ -55,7 +55,8 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pParam(Node\Param $node) {
-	    return ($node->type ? $this->pType($node->type) . ' ' : '/* TODO: Add type */')
+		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Add type */');
+	    return $type . ' '
 	         . ($node->byRef ? '&' : '')
 	         . ($node->variadic ? '...' : '')
 	         . $node->name
