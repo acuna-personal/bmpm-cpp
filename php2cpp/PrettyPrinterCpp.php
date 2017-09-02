@@ -45,13 +45,21 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function p(Node $node) {
 		$s = parent::p($node);
-		/*
+/*
 		// For debugging
-		if ($s == "false") {
+		if ($s == "\$languageNamesASDF") {
 			print_r($node);
 		}
-		*/
+*/
 		return $s;
+	}
+
+	protected function pParam(Node\Param $node) {
+	    return ($node->type ? $this->pType($node->type) . ' ' : '/* TODO: Add type */')
+	         . ($node->byRef ? '&' : '')
+	         . ($node->variadic ? '...' : '')
+	         . $node->name
+	         . ($node->default ? ' = ' . $this->p($node->default) : '');
 	}
 
 	protected function pExpr_ConstFetch(Expr\ConstFetch $node) {
@@ -59,6 +67,8 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		$strLower = strtolower($str);
 		if ($strLower == "true" || $strLower == "false") {
 			return $strLower;
+		} else if ($strLower == "null") {
+			return "NULL";
 		} else {
 		    return $str;
 		}
