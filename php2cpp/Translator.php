@@ -57,22 +57,24 @@ class Translator {
 			$input = file_get_contents($inPath);
 
 			if (preg_match("/^(.*)\.php$/", $outPath, $fileParts)) {
+				$outPathH = $fileParts[1] . '.h';
+				$outPathCpp = $fileParts[1] . '.cpp';
+
+				$input = $this->preProcess($input, $fileParts[1]); // we don't know if it's the h or cpp yet
 				$stmts = $this->stmtsForCode($input);
 
 				// .h
-				$outPathH = $fileParts[1] . '.h';
 				$this->_prettyPrinter->headersOnly = true;
 				$outputH = $this->_prettyPrinter->prettyPrint($stmts);
-				$outputH = $this->_postProcess($outputH, $outPathH);
+				$outputH = $this->postProcess($outputH, $outPathH);
 				$this->_writeFile($outputH, $outPathH);				
 
 				// .cpp
-				$outPathCpp = $fileParts[1] . '.cpp';
 				$this->_prettyPrinter->headersOnly = false;
 				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
 				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n"
 					. $outputCpp;
-				$outputCpp = $this->_postProcess($outputCpp, $outPathCpp);
+				$outputCpp = $this->postProcess($outputCpp, $outPathCpp);
 				$this->_writeFile($outputCpp, $outPathCpp);
 			} else {
 				$output = $input;
@@ -98,7 +100,12 @@ class Translator {
 		print_r($undefinedFunctions);
 	}
 
-	protected function _postProcess($cpp, $outPath) {
+	protected function preProcess($php, $outPath) {
+		$php = preg_replace('~/\*\*\*IFNCPP\*\*\*/(.+)/\*\*\*ENDIFNCPP\*\*\*/~sm', '', $php);
+		return $php;
+	}
+
+	protected function postProcess($cpp, $outPath) {
 		// Remove ; after #includes
 		$cpp = preg_replace('/(#include "(.*)");/', '$1', $cpp);
 
