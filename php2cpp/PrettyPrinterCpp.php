@@ -182,6 +182,18 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	         . 'static const ' . $this->pCommaSeparated($node->consts) . ';';
 	}
 
+	protected function pConst(Node\Const_ $node) {
+		$str = '';
+		if ($node->value instanceof Scalar\String_) {
+			$str .= 'std::string ';
+		}
+		
+		$str .= $node->name;
+		$str .= ' = ';
+		$str .= $this->p($node->value);
+	    return $str;
+	}
+
 
 	/**** Helpers ****/
 
