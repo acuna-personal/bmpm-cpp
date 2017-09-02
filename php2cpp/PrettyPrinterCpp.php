@@ -65,12 +65,23 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
-		$flags = $this->pModifiers($node->flags);
-	    return ($flags ? '/* ORIG: ' . $flags . ' */ ' : '') // not supported for C++ classes
-	    . 'class' . $afterClassToken
-	    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
-	    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
-	    . "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '};';
+		$str = '';
+		if ($this->headersOnly) {
+		    $flags = $this->pModifiers($node->flags);
+		    $str .= ($flags ? '/* ORIG: ' . $flags . ' */ ' : '') // not supported for C++ classes
+		    . 'class' . $afterClassToken
+		    . (null !== $node->extends ? ' : ' . $this->p($node->extends) : '')
+		    . (!empty($node->implements) ? ' implements ' . $this->pCommaSeparated($node->implements) : '')
+		    . "\n" . '{';
+		}
+
+    	$str .= $this->pStmts($node->stmts);
+
+    	if ($this->headersOnly) {
+		    $str .= "\n" . '};';
+		}
+
+	    return $str;
 	}
 
 	protected function p(Node $node) {

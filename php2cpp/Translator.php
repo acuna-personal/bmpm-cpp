@@ -63,8 +63,8 @@ class Translator {
 				$outPathH = $fileParts[1] . '.h';
 				$this->_prettyPrinter->headersOnly = true;
 				$outputH = $this->_prettyPrinter->prettyPrint($stmts);
-				$outputH = $this->_postProcess($outputH);
-				$this->_writeFile($outPathH, $outputH);				
+				$outputH = $this->_postProcess($outputH, $outPathH);
+				$this->_writeFile($outputH, $outPathH);				
 
 				// .cpp
 				$outPathCpp = $fileParts[1] . '.cpp';
@@ -72,11 +72,11 @@ class Translator {
 				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
 				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n"
 					. $outputCpp;
-				$outputCpp = $this->_postProcess($outputCpp);
-				$this->_writeFile($outPathCpp, $outputCpp);
+				$outputCpp = $this->_postProcess($outputCpp, $outPathCpp);
+				$this->_writeFile($outputCpp, $outPathCpp);
 			} else {
 				$output = $input;
-				$this->_writeFile($outPath, $output);
+				$this->_writeFile($output, $outPath);
 			}
 		}
 
@@ -98,7 +98,7 @@ class Translator {
 		print_r($undefinedFunctions);
 	}
 
-	protected function _postProcess($cpp) {
+	protected function _postProcess($cpp, $outPath) {
 		// Remove ; after #includes
 		$cpp = preg_replace('/(#include "(.*)");/', '$1', $cpp);
 
@@ -106,11 +106,21 @@ class Translator {
 		$cpp = preg_replace('/^\s*;\n/m', '', $cpp);
 
 		// Add basic includes that are dependencies for any translated code
-		$cpp = $this->_includes . "\n\n" . $cpp;
-		return $cpp;
+		$const = $this->constFromFilePath($outPath);
+		$top = $this->_includes . "\n\n"
+			. "#ifndef $const\n"
+			. "#define $const\n"
+			. "#else\n\n";
+		$bottom = "\n\n#endif";
+
+		return $top . $cpp . $bottom;
 	}
 
-	protected function _writeFile($outPath, $output) {
+	protected function constFromFilePath($path) {
+		return strtoupper(preg_replace('/[^a-zA-Z]+/', '_', basename($path)));
+	}
+
+	protected function _writeFile($output, $outPath) {
 		@mkdir(dirname($outPath), 0755, true); // $path is a file
 		return file_put_contents($outPath, $output);
 	}
