@@ -11,10 +11,14 @@ class Translator {
 	private $_ignores = null;
 	private $_parser = null;
 	private $_prettyPrinter = null;
+	private $_includes = '';
 
 	function __construct($parser, $prettyPrinter) {
 		$this->_parser = $parser;
 		$this->_prettyPrinter = $prettyPrinter;
+		$this->_includes = ''
+			. "#include <iostream>\n"
+			. "#include <string>";
 	}
 
 	function translate($inputDirectory, $outputDirectory) {
@@ -59,13 +63,16 @@ class Translator {
 				$outPathH = $fileParts[1] . '.h';
 				$this->_prettyPrinter->headersOnly = true;
 				$outputH = $this->_prettyPrinter->prettyPrint($stmts);
+				$outputH = $this->_postProcess($outputH);
 				$this->_writeFile($outPathH, $outputH);				
 
 				// .cpp
 				$outPathCpp = $fileParts[1] . '.cpp';
 				$this->_prettyPrinter->headersOnly = false;
 				$outputCpp = $this->_prettyPrinter->prettyPrint($stmts);
-				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n" . $outputCpp;
+				$outputCpp = '#include "' . basename($outPathH) . "\"\n\n"
+					. $outputCpp;
+				$outputCpp = $this->_postProcess($outputCpp);
 				$this->_writeFile($outPathCpp, $outputCpp);
 			} else {
 				$output = $input;
@@ -76,10 +83,6 @@ class Translator {
 		$definedFunctions = $this->_prettyPrinter->definedFunctions;
 		$calledFunctions = $this->_prettyPrinter->calledFunctions;
 		$undefinedFunctions = array();
-		echo "defined:\n";
-		print_r($undefinedFunctions);
-		echo "Called:\n";
-		print_r($calledFunctions);
 		foreach ($calledFunctions as $func) {
 			$idx = array_search($func, $definedFunctions);
 			if ($idx === false) {
@@ -87,7 +90,18 @@ class Translator {
 			}
 		}
 
+		echo "defined:\n";
+		print_r($undefinedFunctions);		
+		echo "called:\n";
+		print_r($calledFunctions);
+		echo "undefined:\n";
 		print_r($undefinedFunctions);
+	}
+
+	protected function _postProcess($cpp) {
+		$cpp = preg_replace('/(#include "(.*)");/', '$1', $cpp);
+		$cpp = $this->_includes . "\n\n" . $cpp;
+		return $cpp;
 	}
 
 	protected function _writeFile($outPath, $output) {
