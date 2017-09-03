@@ -18,9 +18,6 @@ class Translator {
 		$this->_prettyPrinter = $prettyPrinter;
 		$this->_includes = ''
 			. "#include \"cpp/php2cpp.h\"\n"
-			. "#include <iostream>\n"
-			. "#include <string>\n"
-			. "#include <cstdio>\n"
 			;
 	}
 
@@ -28,7 +25,7 @@ class Translator {
 	function translate($inputDirectory, $outputDirectory) {
 		$this->translateDirectory($inputDirectory, $outputDirectory);
 		$this->translateDirectory("php2cpp/cpp", $outputDirectory);
-		$this->staticAnalyze();
+		//$this->staticAnalyze();
 	}
 
 	function translateDirectory($inputDirectory, $outputDirectory) {
@@ -47,7 +44,7 @@ class Translator {
 
 			$inPath = $info->getPathname();
 			$outPath = $outputDirectory . '/' . substr($inPath, strpos($inPath, '/') + 1);
-			echo "in=$inPath out=$outPath\n";
+			//echo "in=$inPath out=$outPath\n";
 			$input = file_get_contents($inPath);
 
 			if (preg_match("/^(.*)\.php$/", $outPath, $fileParts)) {

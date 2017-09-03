@@ -54,15 +54,6 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		return false;
 	}
 */
-	// Class ivars
-	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
-		if ($this->headersOnly) {
-		    return $node->name // without $
-		         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
-	     } else {
-	     	return '';
-	     }
-	}
 
 	protected function pClassCommon(Stmt\Class_ $node, $afterClassToken) {
 		$str = '';
@@ -146,8 +137,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pParam(Node\Param $node) {
-		$type = ($node->type ? $this->pType($node->type) : 'php_type');
-	    return $type . ' '
+	    return $this->inferCPPType($node->default, $node->type) . ' '
 	         . ($node->byRef ? '&' : '')
 	         . ($node->variadic ? '...' : '')
 	         . $node->name
@@ -279,20 +269,55 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $str;
 	}
 
+	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
+		if ($this->headersOnly) {
+		    return $this->inferCPPType($node->default) . ' '
+		    	 . $node->name
+		         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
+	     } else {
+	     	return '';
+	     }
+	}
+
 	protected function pConst(Node\Const_ $node) {
 		$str = '';
-		if ($node->value instanceof Scalar\String_) {
-			$str .= 'std::string ';
-		} else {
-			$str .= 'php_type';
-		}
-		
+
+		$str .= $this->inferCPPType($node->value) . ' ';
 		$str .= $node->name;
 		if (!$this->headersOnly) {
 			$str .= ' = ';
 			$str .= $this->p($node->value);
 		}
 	    return $str;
+	}
+
+	protected function pStmt_StaticVar(Stmt\StaticVar $node) {
+	    $str = '';
+	    $str .= $this->inferCPPType($node->default) . ' ';
+	    $str .= $node->name;
+	    if (!$this->headersOnly && null !== $node->default) {
+	    	$str .= ' = ' . $this->p($node->default);
+	    }
+	    return $str;
+	}
+
+	protected function inferCPPType($value, $givenType = null) {
+		if ($givenType) {
+			$str = $givenType;
+		} else {
+			if ($value instanceof Scalar\String_) {
+				$str = 'std::string';
+			} else if (isset($value->name) && $this->isBoolean($value->name)) {
+				$str = "bool";
+			} else {
+				$str = "php_type";
+			}
+		}
+		return $str;
+	}
+
+	protected function isBoolean($name) {
+		return strtolower($name) == "true" || strtolower($name) == "false";
 	}
 
 	protected function pScalar_String(Scalar\String_ $node) {
