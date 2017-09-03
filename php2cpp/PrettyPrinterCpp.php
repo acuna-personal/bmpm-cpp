@@ -146,7 +146,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pParam(Node\Param $node) {
-		$type = ($node->type ? $this->pType($node->type) : '/* TODO: Fix type */ void*');
+		$type = ($node->type ? $this->pType($node->type) : 'php_type');
 	    return $type . ' '
 	         . ($node->byRef ? '&' : '')
 	         . ($node->variadic ? '...' : '')
@@ -189,8 +189,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		if ($node->name == 'main') {
 			$str .= "int main(int argc, const char * argv[]);";
 		} else {
-			$str .= $tag 
-				. $this->typeForFuncoid($node)
+			$str .= $this->typeForFuncoid($node)
 				. ($node->byRef ? '&' : '') . $node->name
 				. '(' . $this->pCommaSeparated($node->params) . ');';
 		}
@@ -213,7 +212,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		if (!$this->containsReturn($node->stmts)) {
 			$type = 'void ';
 		} else {
-			$type = (null !== $node->returnType ? $this->p($node->returnType) : '/* TODO: Fix type */ void* '); // user will fix manually
+			$type = (null !== $node->returnType ? $this->p($node->returnType) : 'php_type ');
 		}
 		return $type;
 	}
@@ -268,14 +267,24 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pStmt_ClassConst(Stmt\ClassConst $node) {
-	    return $this->pModifiers($node->flags)
-	         . ($this->headersOnly ? 'public: static ' : '') . 'const ' . $this->pCommaSeparated($node->consts) . ';';
+		$str = '';
+	    $str .= $this->pModifiers($node->flags);
+	    if ($this->headersOnly) {
+		    $str .= 'public: static ';
+	    }
+
+	    $str .= 'const ';
+	    $str .= $this->pCommaSeparated($node->consts) . ';';
+
+	    return $str;
 	}
 
 	protected function pConst(Node\Const_ $node) {
 		$str = '';
 		if ($node->value instanceof Scalar\String_) {
 			$str .= 'std::string ';
+		} else {
+			$str .= 'php_type';
 		}
 		
 		$str .= $node->name;

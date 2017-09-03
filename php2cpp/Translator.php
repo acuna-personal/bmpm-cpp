@@ -17,36 +17,29 @@ class Translator {
 		$this->_parser = $parser;
 		$this->_prettyPrinter = $prettyPrinter;
 		$this->_includes = ''
+			. "#include \"cpp/php2cpp.h\"\n"
 			. "#include <iostream>\n"
 			. "#include <string>\n"
-			. "#include <cstdio>";
+			. "#include <cstdio>\n"
+			;
 	}
 
+	// Main API access point
 	function translate($inputDirectory, $outputDirectory) {
+		$this->translateDirectory($inputDirectory, $outputDirectory);
+		$this->translateDirectory("php2cpp/cpp", $outputDirectory);
+		$this->staticAnalyze();
+	}
+
+	function translateDirectory($inputDirectory, $outputDirectory) {
 		if ($inputDirectory == '' || $outputDirectory == '') {
 			echo "Must have input and output directory: inputDirectory=$inputDirectory outputDirectory=$outputDirectory\n";
 			return false;
 		}
 
-		mkdir($outputDirectory, 0755, true);
+		@mkdir($outputDirectory, 0755, true);
 
-		$directory = new \RecursiveDirectoryIterator($inputDirectory, \FilesystemIterator::FOLLOW_SYMLINKS);
-		$filter = new \RecursiveCallbackFilterIterator($directory, function ($current, $key, $iterator) {
-			if ($this->getIgnores()) {
-				foreach ($this->getIgnores() as $ignore) {
-					if ($current->getFilename() == '.'
-						|| $current->getFilename() == '..'
-						|| preg_match($ignore, $current->getFilename())) {
-						return false;
-					}
-				}
-			}
-
-			return true;
-			});
-
-		$iterator = new \RecursiveIteratorIterator($filter);
-		$files = array();
+		$iterator = $this->newDirectoryIterator($inputDirectory);
 		foreach ($iterator as $info) {
 			if ($info->isDir()) {
 				continue;
@@ -82,7 +75,28 @@ class Translator {
 				$this->_writeFile($output, $outPath);
 			}
 		}
+	}
 
+	protected function newDirectoryIterator($inputDirectory) {
+		$directory = new \RecursiveDirectoryIterator($inputDirectory, \FilesystemIterator::FOLLOW_SYMLINKS);
+		$filter = new \RecursiveCallbackFilterIterator($directory, function ($current, $key, $iterator) {
+			if ($this->getIgnores()) {
+				foreach ($this->getIgnores() as $ignore) {
+					if ($current->getFilename() == '.'
+						|| $current->getFilename() == '..'
+						|| preg_match($ignore, $current->getFilename())) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+			});
+
+		return new \RecursiveIteratorIterator($filter);
+	}
+
+	protected function staticAnalyze() {
 		$definedFunctions = $this->_prettyPrinter->definedFunctions;
 		$calledFunctions = $this->_prettyPrinter->calledFunctions;
 		$undefinedFunctions = array();
