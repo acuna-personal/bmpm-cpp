@@ -120,9 +120,8 @@ class Translator {
 		$const = $this->constFromFilePath($outPath);
 		$top = $this->_includes . "\n\n"
 			. "#ifndef $const\n"
-			. "#define $const\n"
-			. "#else\n\n";
-		$bottom = "\n\n#endif";
+			. "#define $const\n\n";
+		$bottom = "\n\n#else\n#endif";
 
 		return $top . $cpp . $bottom;
 	}

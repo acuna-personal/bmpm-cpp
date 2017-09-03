@@ -180,17 +180,26 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pStmt_Function(Stmt\Function_ $node) {
-		$tag = '';
-
 		if ($node->name && !in_array('' . $node->name, $this->definedFunctions)) {
 			array_push($this->definedFunctions, '' . $node->name);
 		}
 
-	    return $tag
-		     . $this->typeForFuncoid($node)
-	    	 . ($node->byRef ? '&' : '') . $node->name
-	         . '(' . $this->pCommaSeparated($node->params) . ');'
-	         . ($this->headersOnly ? '' : "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}');
+		$str = '';
+
+		if ($node->name == 'main') {
+			$str .= "int main(int argc, const char * argv[]);";
+		} else {
+			$str .= $tag 
+				. $this->typeForFuncoid($node)
+				. ($node->byRef ? '&' : '') . $node->name
+				. '(' . $this->pCommaSeparated($node->params) . ');';
+		}
+
+		if (!$this->headersOnly) {
+			$str .= "\n" . '{' . $this->pStmts($node->stmts) . "\n" . "}\n";
+		}
+
+	    return $str;
 	}
 
 	protected function pExpr_FuncCall(Expr\FuncCall $node) {
