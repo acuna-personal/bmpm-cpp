@@ -150,10 +150,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	         . $this->pModifiers($node->flags)
 	         . $this->typeForFuncoid($node)
  	         . ($node->byRef ? '&' : '') . $node->name
-	         . '(' . $this->pCommaSeparated($node->params) . ');'
+	         . '(' . $this->pCommaSeparated($node->params) . ')'
 	         . (null !== $node->stmts && !$this->headersOnly
 	            ? "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}'
-	            : '');
+	            : ';');
 	}
 
 	protected function pModifiers($modifiers) {
@@ -181,11 +181,13 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 		} else {
 			$str .= $this->typeForFuncoid($node)
 				. ($node->byRef ? '&' : '') . $node->name
-				. '(' . $this->pCommaSeparated($node->params) . ');';
+				. '(' . $this->pCommaSeparated($node->params) . ')';
 		}
 
 		if (!$this->headersOnly) {
 			$str .= "\n" . '{' . $this->pStmts($node->stmts) . "\n" . "}\n";
+		} else {
+			$str .= ';';
 		}
 
 	    return $str;
@@ -269,6 +271,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $str;
 	}
 
+// RESUME: This needs to put the default value in the implementation file - for statics only
 	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
 		$str = '';
 		if ($this->headersOnly) {
