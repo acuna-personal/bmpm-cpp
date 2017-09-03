@@ -42,9 +42,9 @@ abstract class BMPM {
 	private $_languageRules;
 	private $_allLanguagesBitmap;
 
-	private static $_bmpmAshkenazi = null;
-	private static $_bmpmGeneric = null;
-	private static $_bmpmSephardic = null;
+	private static $_bmpmAshkenazi;
+	private static $_bmpmGeneric;
+	private static $_bmpmSephardic;
 
 	public static function getBMPM($type = BMPM::TYPE_GENERIC) {
 		$bmpm = null;
