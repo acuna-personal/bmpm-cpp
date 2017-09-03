@@ -25,7 +25,7 @@ class Translator {
 	function translate($inputDirectory, $outputDirectory) {
 		$this->translateDirectory($inputDirectory, $outputDirectory);
 		$this->translateDirectory("php2cpp/cpp", $outputDirectory);
-		//$this->staticAnalyze();
+		$this->staticAnalyze();
 	}
 
 	function translateDirectory($inputDirectory, $outputDirectory) {
@@ -104,12 +104,18 @@ class Translator {
 			}
 		}
 
+		/*
 		echo "defined:\n";
 		print_r($undefinedFunctions);		
 		echo "called:\n";
 		print_r($calledFunctions);
-		echo "undefined:\n";
-		print_r($undefinedFunctions);
+		*/
+		echo "PHP functions called:\n";
+		$undefinedFunctions = array_iunique($undefinedFunctions, true);
+
+		foreach ($undefinedFunctions as $f) {
+			echo "php_type $f();\n";
+		}
 	}
 
 	protected function preProcess($php, $outPath) {
@@ -195,5 +201,11 @@ class ParentConnector extends NodeVisitorAbstract {
         array_pop($this->stack);
     }
 }
+
+https://secure.php.net/manual/en/function.array-unique.php
+function array_iunique($array) { 
+    $lowered = array_map('strtolower', $array); 
+    return array_intersect_key($array, array_unique($lowered)); 
+} 
 
 ?>
