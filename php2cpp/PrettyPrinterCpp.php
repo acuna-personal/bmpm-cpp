@@ -270,13 +270,13 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function pStmt_PropertyProperty(Stmt\PropertyProperty $node) {
+		$str = '';
 		if ($this->headersOnly) {
-		    return $this->inferCPPType($node->default) . ' '
-		    	 . $node->name
-		         . (null !== $node->default ? ' = ' . $this->p($node->default) : '');
-	     } else {
-	     	return '';
+		    $str .= $this->inferCPPType($node->default) . ' ';
+			$str .= $node->name;
+			$str .= (null !== $node->default ? ' = ' . $this->p($node->default) : '');
 	     }
+	     return $str;
 	}
 
 	protected function pConst(Node\Const_ $node) {
@@ -291,6 +291,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	    return $str;
 	}
 
+	// currently unused?
 	protected function pStmt_StaticVar(Stmt\StaticVar $node) {
 	    $str = '';
 	    $str .= $this->inferCPPType($node->default) . ' ';
