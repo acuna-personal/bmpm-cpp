@@ -21,7 +21,20 @@
    *
    */
   
-  function soundx_name($MyStrArg) {
+  function soundx_data() {
+    include "dmlat.php";
+    
+    return array(
+      'firstLetter' => $firstLetter,
+      'lastLetter' => $lastLetter,
+      'vowels' => $vowels,
+      'newrules' => $newrules,
+      'xnewrules' => $xnewrules,
+      'xnewruleslist' => $xnewruleslist,
+      );
+  }
+
+    function soundx_name($MyStrArg) {
 
     $GROUPSEPARATOR = " ";
 

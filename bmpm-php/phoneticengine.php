@@ -20,6 +20,7 @@
    * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
+  /***IFNCPP***/
 
    // 1 is language code for any
   function Phonetic($input, $type, $rules, $finalRules1, $finalRules2, $languageArg="1", $concat=false) {
@@ -33,6 +34,7 @@
     */
     return Phonetic_UTF8($input, $type, $rules, $finalRules1, $finalRules2, $languageArg, $concat);
   }
+  /***ENDIFNCPP***/
 
   function RedoLanguage($input, $type, $allLanguagesBitmap, $languageRules, $rules, $finalRules1, $finalRules2, $concat=false) {
     // we can do a better job of determining the language now that multiple names have been split

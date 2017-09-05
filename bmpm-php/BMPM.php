@@ -76,6 +76,31 @@ abstract class BMPM {
 		return $bmpm;
 	}
 
+	public static function getAllBMPMData() {
+		return array(
+			BMPM::TYPE_GENERIC => BMPM::getBMPM(BMPM::TYPE_GENERIC)->getData(),
+			BMPM::TYPE_ASHKENAZI => BMPM::getBMPM(BMPM::TYPE_ASHKENAZI)->getData(),
+			BMPM::TYPE_SEPHARDIC => BMPM::getBMPM(BMPM::TYPE_SEPHARDIC)->getData(),
+			);
+	}
+
+	public function getData() {
+		return utf8ize(array(
+			'languageNames' => $this->getLanguageNames(),
+			'rules' => $this->getRules(),
+			'exact' => $this->getExact(),
+			'exactCommon' => $this->getExactCommon(),
+			'approx' => $this->getApprox(),
+			'approxCommon' => $this->getApproxCommon(),
+			'languageRules' => $this->getLanguageRules(),
+			'allLanguagesBitmap' => $this->getAllLanguagesBitmap(),
+			));
+	}
+
+	public static function getDMData() {
+		return soundx_data();
+	}
+
 	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY, $exact = true) {
 		$bmpm = BMPM::getBMPM($type);
 		if ($bmpm == null) {
@@ -236,6 +261,8 @@ abstract class BMPM {
 	}
 }
 
+/***IFNCPP***/
+
 // From WordPress via https://stackoverflow.com/questions/1017599/how-do-i-remove-accents-from-characters-in-a-php-string
 function remove_accents($string) {
     if ( !preg_match('/[\x80-\xff]/', $string) )
@@ -343,6 +370,72 @@ function remove_accents($string) {
     return $newString;
 }
 
+function utf8ize($d) {
+    if (is_array($d)) {
+        foreach ($d as $k => $v) {
+            $d[$k] = utf8ize($v);
+        }
+    } else if (is_string ($d)) {
+        return utf8_encode($d);
+    }
+    return $d;
+}
+
+/***ENDIFNCPP***/
+
+function BMPMTypeForName($typeName) {
+  switch ($typeName) {
+    case "sep":
+      return BMPM::TYPE_SEPHARDIC;
+    case "ash":
+      return BMPM::TYPE_ASHKENAZI;
+  }
+  return BMPM::TYPE_GENERIC;
+}
+
+function BMPMLanguageForName($languageName) {
+  switch ($languageName) {
+    case "arabic":
+      return BMPM::LANGUAGE_ARABIC;
+    case "cyrillic":
+      return BMPM::LANGUAGE_CYRILLIC;
+    case "czech":
+      return BMPM::LANGUAGE_CZECH;
+    case "dutch":
+      return BMPM::LANGUAGE_DUTCH;
+    case "english":
+      return BMPM::LANGUAGE_ENGLISH;
+    case "french":
+      return BMPM::LANGUAGE_FRENCH;
+    case "german":
+      return BMPM::LANGUAGE_GERMAN;
+    case "greek":
+      return BMPM::LANGUAGE_GREEK;
+    case "greeklatin":
+      return BMPM::LANGUAGE_GREEKLATIN;
+    case "hebrew":
+      return BMPM::LANGUAGE_HEBREW;
+    case "hungarian":
+      return BMPM::LANGUAGE_HUNGARIAN;
+    case "italian":
+      return BMPM::LANGUAGE_ITALIAN;
+    case "latvian":
+      return BMPM::LANGUAGE_LATVIAN;
+    case "polish":
+      return BMPM::LANGUAGE_POLISH;
+    case "portuguese":
+      return BMPM::LANGUAGE_PORTUGUESE;
+    case "romanian":
+      return BMPM::LANGUAGE_ROMANIAN;
+    case "russian":
+      return BMPM::LANGUAGE_RUSSIAN;
+    case "spanish":
+      return BMPM::LANGUAGE_SPANISH;
+    case "turkish":
+      return BMPM::LANGUAGE_TURKISH;
+  }
+  return BMPM::LANGUAGE_ANY;
+}
 
 include_once "BMPMGeneric.php";
 include_once "BMPMSephardic.php";

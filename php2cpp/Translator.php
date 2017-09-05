@@ -35,6 +35,15 @@ class Translator {
 		}
 
 		@mkdir($outputDirectory, 0755, true);
+	
+		// Include php2cpp before as actual PHP
+		$PHP2CPP_INPUT_DIRECTORY = $inputDirectory;
+		$PHP2CPP_OUTPUT_DIRECTORY = $outputDirectory;
+		$php2CppBefore = $inputDirectory . "/php2cpp-before.php";
+		if (file_exists($php2CppBefore)) {
+			echo $inputDirectory . "/php2cpp-before.php";
+			include $inputDirectory . "/php2cpp-before.php";
+		}
 
 		$iterator = $this->newDirectoryIterator($inputDirectory);
 		foreach ($iterator as $info) {

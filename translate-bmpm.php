@@ -23,6 +23,7 @@ $prettyPrinter = new PrettyPrinterCpp();
 $translator = new Translator($parser, $prettyPrinter);
 
 $translator->setIgnores(array(
+	'/^php2cpp-before\.php/',
 	'/^\.git$/',
 	'/^\.DS_Store$/',
 	));
