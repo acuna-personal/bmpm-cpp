@@ -27,12 +27,6 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 			if ($node->name == 'this') {
 				$str .= 'this';
 			} else {
-				$parent = $node->getAttribute('parent');
-				/*
-			    if (!$this->containsName($parent, $node->name, $parent)) {
-			    	$str .= '/* first use *\/ ';
-			    }
-			    */
 				$str .= $node->name; // without $
 			}
 		}
