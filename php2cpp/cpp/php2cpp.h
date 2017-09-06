@@ -5,9 +5,6 @@
 #ifndef PHP2CPP_H
 #define PHP2CPP_H
 
-// placeholder for unknown types from PHP
-#define php_type void*
-
 php_type array_merge();
 php_type trim();
 php_type debug_print_backtrace();

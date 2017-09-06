@@ -135,7 +135,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	         . ($node->byRef ? '&' : '')
 	         . ($node->variadic ? '...' : '')
 	         . $node->name
-	         . ($node->default ? ' = ' . $this->p($node->default) : '');
+	         . ($this->headersOnly && $node->default ? ' = ' . $this->p($node->default) : '');
 	}
 
 	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
@@ -350,7 +350,7 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	            $return .= $this->escapeString($element->value, $quote);
 	        } else {
 
-	            $return .= '" + std::to_string(' . $this->p($element) . ') + "';
+	            $return .= '" + ' . $this->p($element) . ' + "';
 	        }
 	    }
 
