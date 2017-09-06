@@ -41,13 +41,13 @@ int main(int argc, const char * argv[]);
         }
         try {
             // TODO: Order shouldn't matter for any of these
-            bmpmApproxActual = BMPM::getPhoneticEncoding(name, typeForName(typeName), languageForName(languageName), false);
+            bmpmApproxActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), false);
             if (bmpmApproxActual != bmpmApproxExpected) {
                 std::cout << "" + inputFileName + ":" + ln + " BMPM::getPhoneticEncoding failed: [[" + name + " " + typeName + " " + languageName + " approx]]\n[[expected]] " + bmpmApproxExpected + "\n  [[actual]] " + bmpmApproxActual + "\n";
                 fails++;
                 beep();
             }
-            bmpmExactActual = BMPM::getPhoneticEncoding(name, typeForName(typeName), languageForName(languageName), true);
+            bmpmExactActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), true);
             if (bmpmExactActual != bmpmExactExpected) {
                 std::cout << "" + inputFileName + ":" + ln + " BMPM::getPhoneticEncoding failed: [[" + name + " " + typeName + " " + languageName + " exact]]\n[[expected]] " + bmpmExactExpected + "\n  [[actual]] " + bmpmExactActual + "\n";
                 fails++;

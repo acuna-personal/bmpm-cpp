@@ -26,7 +26,11 @@
 /* ORIG: include_once */
 #include "approxfrench.h"
 approxSpanish = {{"B", "", "", "(b|v)"}, {"V", "", "", "(b|v)"}, {"approxfrench plus approxspanish"}};
+array_pop(approxFrench);
 approxSpanish = array_merge(approxFrench, approxSpanish);
+approx[LanguageIndex("spanish", languages)] = approxSpanish;
+?> 
+<?php 
 
 #else
 #endif

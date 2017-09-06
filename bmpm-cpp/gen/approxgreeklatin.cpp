@@ -28,6 +28,7 @@
 /* ORIG: include_once */
 #include "approxfrench.h"
 approxGreeklatin = {{"N", "", "", ""}, {"approxfrench plus approxgreeklatin"}};
+array_pop(approxFrench);
 approxGreeklatin = array_merge(approxFrench, approxGreeklatin);
 approx[LanguageIndex("greeklatin", languages)] = approxGreeklatin;
 
