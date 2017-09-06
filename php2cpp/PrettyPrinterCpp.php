@@ -140,10 +140,21 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 
 	protected function pStmt_ClassMethod(Stmt\ClassMethod $node) {
 		$tag = '';
+		$name = $node->name;
+		$parent = $node->getAttribute('parent');
+		if ($parent) {
+			if ($name == '__construct') {
+				$name = $parent->name;
+			}
+
+			if (!$this->headersOnly) {
+				$name = $parent->name . '::' . $name;
+			}
+		}
 	    return $tag
 	         . $this->pModifiers($node->flags)
 	         . $this->typeForFuncoid($node)
- 	         . ($node->byRef ? '&' : '') . $node->name
+ 	         . ($node->byRef ? '&' : '') . $name
 	         . '(' . $this->pCommaSeparated($node->params) . ')'
 	         . (null !== $node->stmts && !$this->headersOnly
 	            ? "\n" . '{' . $this->pStmts($node->stmts) . "\n" . '}'
@@ -195,6 +206,10 @@ class PrettyPrinterCpp extends PrettyPrinter\Standard {
 	}
 
 	protected function typeForFuncoid($node) {
+		if ($node->name == '__construct') {
+			return ''; // C++ constructor type is already known
+		}
+
 		if (!$this->containsReturn($node->stmts)) {
 			$type = 'void ';
 		} else {
