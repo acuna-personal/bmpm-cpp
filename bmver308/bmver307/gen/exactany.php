@@ -21,16 +21,36 @@
    *
    */
 
-  include_once "approxfrench.php";
+// GENERAL
+   // A, E, I, O, P, U should create variants, 
+   // EE = final "e" (english & french)
+   // V, B from Spanish
+   // but a, e, i, o, u should not create any new variant
+  $exactAny = array(
+    array ("EE", "", "$", "e"),
+    
+    array ("A", "", "", "a"),
+    array ("E", "", "", "e"),
+    array ("I", "", "", "i"),
+    array ("O", "", "", "o"),
+    array ("P", "", "", "o"),
+    array ("U", "", "", "u"),
+    
+    array("B","","[fktSs]","p"),
+    array("B","","p",""),
+    array("B","","$","p"),
+    array("V","","[pktSs]","f"),
+    array("V","","f",""),
+    array("V","","$","f"),
+    
+    array ("B", "", "", "b"),
+    array ("V", "", "", "v"),
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+        
+    array("exactany")
+      
+  );
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+  $exact[LanguageIndex("any", $languages)] = $exactAny;
 
-?>
+?> 

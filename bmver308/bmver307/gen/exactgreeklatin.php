@@ -1,5 +1,5 @@
 <?php
-
+  
   /*
    *
    * Copyright Alexander Beider and Stephen P. Morse, 2008
@@ -21,15 +21,14 @@
    *
    */
 
-  include_once "approxfrench.php";
-
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
-
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-
+ $exactGreeklatin = array(
+   
+      array("N","","","n"),
+   
+      array("exactgreek")
   
+   );
+ 
+  $exact[LanguageIndex("greeklatin", $languages)] = $exactGreeklatin;
+
 ?> 

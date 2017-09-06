@@ -21,16 +21,13 @@
    *
    */
 
-  include_once "approxfrench.php";
+    $exactAny = array(
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+  array("E","","","e"), // final French "e"
+  
+  array("exactany")      
+  );
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+  $exact[LanguageIndex("any", $languages)] = $exactAny;
 
-?>
+?> 

@@ -21,16 +21,17 @@
    *
    */
 
-  include_once "approxfrench.php";
+// GENERAL
+   $exactSpanish = array(
+       
+    array ("B", "", "", "b"),
+    array ("V", "", "", "v"),
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
+    array("exactspanish")
    );
-
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
-
-?>
+ 
+  $exact[LanguageIndex("spanish", $languages)] = $exactSpanish;
+    
+    
+    
+?> 

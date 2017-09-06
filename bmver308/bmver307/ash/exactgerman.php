@@ -21,16 +21,9 @@
    *
    */
 
-  include_once "approxfrench.php";
+  // this file uses the same rules as exactany.php
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+  include_once "exactany.php";
+  $exact[LanguageIndex("german", $languages)] = $exactAny;
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
-
-?>
+?> 

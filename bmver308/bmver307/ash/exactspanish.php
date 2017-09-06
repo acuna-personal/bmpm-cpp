@@ -21,16 +21,10 @@
    *
    */
 
-  include_once "approxfrench.php";
+ //this Ashkenazic file uses the same rules as exactrussian.php
+ include_once "exactrussian.php";
+ $exact[LanguageIndex("spanish", $languages)] = $exactRussian;
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
 
-?>
+?> 
