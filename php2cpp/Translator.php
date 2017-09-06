@@ -41,7 +41,6 @@ class Translator {
 		$PHP2CPP_OUTPUT_DIRECTORY = $outputDirectory;
 		$php2CppBefore = $inputDirectory . "/php2cpp-before.php";
 		if (file_exists($php2CppBefore)) {
-			echo $inputDirectory . "/php2cpp-before.php";
 			include $inputDirectory . "/php2cpp-before.php";
 		}
 
