@@ -81,7 +81,7 @@
   }
 
   function LanguageCode($langName, $languages) {
-    return pow(2, LanguageIndex($langName, $languages));
+    return 1 << LanguageIndex($langName, $languages);
   }
 
   function LanguageIndexFromCode($code, $languages) {
