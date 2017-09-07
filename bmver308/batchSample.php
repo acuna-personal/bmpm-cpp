@@ -72,6 +72,7 @@ if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "<br>";
     } else {
       $languageCode2 = $languageCode;
     }
+    echo "$name => " . LanguageName(LanguageIndexFromCode($languageCode2, $languages), $languages) . "\n";
 
     $result2 = Phonetic_UTF8($name, $rules[LanguageIndexFromCode($languageCode2, $languages)], $approxCommon,
                              $approx[LanguageIndexFromCode($languageCode2, $languages)], $languageCode2);

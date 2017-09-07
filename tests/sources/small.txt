@@ -1,5 +1,2 @@
-telman	any
-kazez	any
-johnson	any
 ABENPACURIEL	any
-Neumann	any
+BIENVENISTE	any

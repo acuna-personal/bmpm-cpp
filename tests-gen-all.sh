@@ -1,11 +1,10 @@
-#!/bin/bash
+!/bin/bash
 
 BMORIG="bmver308"
 
 rm tests/suites/*
 
 echo "Generating Beider tests..."
-
 php tests-gen-beider.php tests/sources/djsara3.txt tests/suites/suite-djsara3.txt spanish+german+polish+romanian ash
 php tests-gen-beider.php tests/sources/djsarb3.txt tests/suites/suite-djsarb3.txt spanish+german+polish+romanian ash
 php tests-gen-beider.php tests/sources/djsarc3.txt tests/suites/suite-djsarc3.txt spanish+german+polish+romanian ash
@@ -42,7 +41,6 @@ php tests-gen-beider.php tests/sources/xtello3.txt tests/suites/suite-xtello3.tx
 php tests-gen-beider.php tests/sources/xsebag3.txt tests/suites/suite-xsebag3.txt auto gen
 
 echo "Generating DK tests..."
-
 php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-gen.txt gen auto
 php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-ash.txt ash auto
 php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-sep.txt sep auto
