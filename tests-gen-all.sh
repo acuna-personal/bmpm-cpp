@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BMORIG="bmver308"
+
 rm tests/suites/*
 
 echo "Generating Beider tests..."
@@ -41,8 +43,8 @@ php tests-gen-beider.php tests/sources/xsebag3.txt tests/suites/suite-xsebag3.tx
 
 echo "Generating DK tests..."
 
-php bmver307/tests-gen.php tests/sources/dk.txt tests/suites/suite-gen.txt gen auto
-php bmver307/tests-gen.php tests/sources/dk.txt tests/suites/suite-ash.txt ash auto
-php bmver307/tests-gen.php tests/sources/dk.txt tests/suites/suite-sep.txt sep auto
+php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-gen.txt gen auto
+php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-ash.txt ash auto
+php $BMORIG/tests-gen.php tests/sources/dk.txt tests/suites/suite-sep.txt sep auto
 
 ./tests-shuffle.sh
