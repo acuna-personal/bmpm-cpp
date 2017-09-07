@@ -51,11 +51,11 @@ function LanguageName($index, $languages) {
 }
 
 function LanguageCode($langName, $languages) {
-  return pow(2, LanguageIndex($langName, $languages));
+  return 1 << LanguageIndex($langName, $languages);
 }
 
 function LanguageIndexFromCode($code, $languages) {
-  if ($code < 0 || $code > pow(2, count($languages)-1)) { // code out of range
+  if ($code < 0 || $code > (1 << count($languages)-1)) { // code out of range
     return 0;
   }
   $log = log($code, 2);
