@@ -138,7 +138,7 @@ abstract class BMPM {
 
 		//echo "$name => " . LanguageName($idx, $languages) . "\n";
 
-		if (!$matchingRules) {
+		if ($matching != BMPM::MATCHING_HEBREW && !$matchingRules) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
 			echo "getPhoneticEncoding: No matching rules for ($name, $type, $language, $matching)\n";
 			return null;
@@ -156,7 +156,7 @@ abstract class BMPM {
 			return null;
 		}
 
-		if (!isset($matchingRules[$idx])) {
+		if ($matching != BMPM::MATCHING_HEBREW && !isset($matchingRules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
 			echo "getPhoneticEncoding: No matching rules for ($name, $type, $language, $matching)\n";
 			return null;
@@ -169,7 +169,7 @@ abstract class BMPM {
 			$languageRules,
 			$rules[$idx],
 			$matchingRulesCommon,
-			$matchingRules[$idx],
+			$matching == BMPM::MATCHING_HEBREW ? "" : $matchingRules[$idx],
 			$languageCode,
 			$matching == BMPM::MATCHING_EXACT // concatenate iff it is an exact match
 			);
