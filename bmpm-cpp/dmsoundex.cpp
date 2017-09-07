@@ -25,21 +25,19 @@
  * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-php_type soundx_data()
-{
-    #include "dmlat.h"
-    return {"firstLetter" => firstLetter, "lastLetter" => lastLetter, "vowels" => vowels, "newrules" => newrules, "xnewrules" => xnewrules, "xnewruleslist" => xnewruleslist};
-}
 
-php_type soundx_name(php_type MyStrArg)
+#define GROUPSEPARATOR " ";
+#define SEPARATOR GROUPSEPARATOR
+#define DMDEBUG false
+
+std::string soundx_name(std::string MyStrArg)
 {
-    GROUPSEPARATOR = " ";
     // replace certain text in strings with a slash
-    re = "/ v | v\\. | vel | aka | f | f. | r | r. | false | recte | on zhe /i";
-    MyStr = preg_replace(re, "/", MyStrArg);
+    std::string re = "/ v | v\\. | vel | aka | f | f. | r | r. | false | recte | on zhe /i";
+    std::string MyStr = preg_replace(re, "/", MyStrArg);
     // append soundex of each individual word
-    result = "";
-    MyStrArray = preg_split("/[ |,]+/", MyStr);
+    std::string result = "";
+    std::vector<std::string> MyStrArray = preg_split("/[ |,]+/", MyStr);
     // use space or comma as token delimiter
     for (i = 0; i < count(MyStrArray); i++) {
         if (strlen(MyStrArray[i]) > 0) {
@@ -53,13 +51,12 @@ php_type soundx_name(php_type MyStrArg)
     return result;
 }
 
-php_type soundx_place(php_type MyStrArg)
+std::string soundx_place(std::string MyStrArg)
 {
-    GROUPSEPARATOR = " ";
     // append soundex of each individual word
     MyStr = preg_replace("[,]", "/", MyStrArg);
-    result = "";
-    MyStrArray = preg_split("/[,]+/", MyStr);
+    std::string result = "";
+    std::vector<std::string> MyStrArray = preg_split("/[,]+/", MyStr);
     // use comma as token delimiter
     for (i = 0; i < count(MyStrArray); i++) {
         if (strlen(MyStrArray[i]) > 0) {
@@ -73,19 +70,18 @@ php_type soundx_place(php_type MyStrArg)
     return result;
 }
 
-php_type dmsoundex2(php_type MyStrArg)
+std::string dmsoundex2(std::string MyStrArg)
 {
-    #include "dmlat.h"
-    SEPARATOR = " ";
-    DMDEBUG = false;
-    MyStr = strtolower(MyStrArg);
-    MyStr3 = MyStr;
+    #include "dmlat.cpp"
+
+    std::string MyStr = strtolower(MyStrArg);
+    std::string MyStr3 = MyStr;
     // MyStr = original, MyStr2 = the current string being split off, MyStr3 = what's left to process
-    dm3 = "";
+    std::string dm3 = "";
     while (strlen(MyStr3) > 0) {
-        MyStr2 = "";
-        LenMyStr3 = strlen(MyStr3);
-        for (i = 0; i < strlen(MyStr3); i++) {
+        std::string MyStr2 = "";
+        std::size_t LenMyStr3 = strlen(MyStr3);
+        for (std::size_t i = 0; i < strlen(MyStr3); i++) {
             if (MyStr3[i] >= firstLetter && MyStr3[i] <= lastLetter || MyStr3[i] == '/' || MyStr3[i] == ' ') {
                 // if (($MyStr3[$i] >= $firstLetter && $MyStr3[$i] <= $lastLetter) || $MyStr3[$i] == '/') {
                 if (MyStr3[i] == '/') {
@@ -115,7 +111,7 @@ php_type dmsoundex2(php_type MyStrArg)
             // finished
         }
         MyStr = MyStr2;
-        dm = "";
+        std::string dm = "";
         allblank = true;
         for (k = 0; k < strlen(MyStr); k++) {
             if (MyStr[k] != ' ') {

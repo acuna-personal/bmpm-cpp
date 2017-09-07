@@ -1,41 +1,38 @@
-#include <iostream>
 #include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
 #include <cstdio>
 
 #ifndef PHP2CPP_H
 #define PHP2CPP_H
 
-php_type array_merge();
-php_type trim();
-php_type debug_print_backtrace();
-php_type in_array();
-php_type preg_match();
-php_type chr();
-php_type strtr();
-php_type preg_replace();
-php_type preg_split();
-php_type count();
-std::string::size_type strlen(std::string str);
+template<typename T>
+std::vector<T> array_merge();
+
+std::string trim(std::string str);
+bool in_array();
+int preg_match(std::string pattern, std::string subject);
+std::string strtr();
+std::string preg_replace(std::string pattern, std::string replacement, std::string subject);
+std::vector<std::string> preg_split(std::string pattern, std::string subject);
+
+std::size_t count(std::string str);
+
+std::size_t strlen(std::string str);
 std::string strtolower(std::string str);
-php_type substr();
-php_type printf();
-php_type strpos();
-php_type print_r();
-php_type utf8_encode();
-php_type html_entity_decode();
-php_type mb_strtolower();
-php_type pow();
-php_type log();
-php_type floor();
-php_type mb_detect_encoding();
-php_type str_replace();
-php_type explode();
-php_type implode();
-php_type array_pop();
-php_type ord();
-php_type dechex();
-php_type fopen();
-php_type fgets();
+std::string substr(std::string str, std::size_t start, std::size_t length);
+std::size_t strpos(std::string haystack, std::string needle);
+void print_r(void *val);
+std::string str_replace(std::string search, std::string replace, std::string subject);
+
+std::vector<std::string> explode(std::string str, std::string delimiter);
+
+template<typename T>
+std::string implode(std::string glue, std::vector<T> pieces);
+
+int ord(std::string str);
+std::string dechex(int n);
 
 #else
 #endif

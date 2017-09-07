@@ -4,8 +4,6 @@
 #ifndef DMLAT_CPP
 #define DMLAT_CPP
 
-#include "dmlat.h"
-
 /*
  *
  * Copyright Stephen P. Morse, 2005
@@ -25,10 +23,10 @@
  * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-firstLetter = 'a';
-lastLetter = 'z';
-vowels = "aeioujy";
-newrules = {
+char firstLetter = 'a';
+char lastLetter = 'z';
+std::string vowels = "aeioujy";
+std::vector<std::vector<std::string>> newrules = {
     {"schtsch", "2", "4", "4"},
     {"schtsh", "2", "4", "4"},
     {"schtch", "2", "4", "4"},

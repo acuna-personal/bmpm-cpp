@@ -5,26 +5,19 @@
 #define LANGUAGES_CPP
 
 #include "languages.h"
+#include <math.h>
 
-php_type Language(php_type name, php_type rules, php_type allLanguagesBitmap)
-{
-    // convert $name to utf8
-    name = utf8_encode(name);
-    // takes care of things in the upper half of the ascii chart, e.g., u-umlaut
-    if (strpos(name, "&") != /* ORIG: !== */ false) {
-        // takes care of ampersand-notation encoding of unicode (&#...;)
-        name = html_entity_decode(name, ENT_NOQUOTES, "UTF-8");
-    }
-    return Language_UTF8(name, rules, allLanguagesBitmap);
-}
-
-php_type Language_UTF8(php_type name, php_type rules, php_type allLanguagesBitmap)
+int Language_UTF8(std::string name, std::vector<std::vector<std::string>> rules, int allLanguagesBitmap)
 {
     //    $name = mb_strtolower($name, mb_detect_encoding($name));
     name = mb_strtolower(name, "UTF-8");
     choicesRemaining = allLanguagesBitmap;
     for (i = 0; i < count(rules); i++) {
-        list(letters, languages, accept) = rules[i];
+        // ORIG: list(letters, languages, accept) = rules[i];
+        std::string letters = rules[i][0];
+        std::string languages = rules[i][1];
+        std::string accept = rules[i][2];
+
         //echo "testing name=$name letters=$letters languages=$languages accept=$accept<br>";
         if (preg_match(letters, name)) {
             if (accept) {
@@ -41,7 +34,7 @@ php_type Language_UTF8(php_type name, php_type rules, php_type allLanguagesBitma
     return choicesRemaining;
 }
 
-php_type LanguageIndex(php_type langName, php_type languages)
+int LanguageIndex(std::string langName, std::vector<std::string> languages)
 {
     for (i = 0; i < count(languages); i++) {
         if (languages[i] == langName) {
@@ -54,7 +47,7 @@ php_type LanguageIndex(php_type langName, php_type languages)
     // name not found
 }
 
-php_type LanguageName(php_type index, php_type languages)
+std::string LanguageName(std::size_t index, std::vector<std::string> languages)
 {
     if (index < 0 || index > count(languages)) {
         std::cout << "index out of range: " + index + "\n";
@@ -65,19 +58,19 @@ php_type LanguageName(php_type index, php_type languages)
     return languages[index];
 }
 
-php_type LanguageCode(php_type langName, php_type languages)
+int LanguageCode(std::string langName, std::vector<std::string> languages)
 {
     return 1 << LanguageIndex(langName, languages);
 }
 
-php_type LanguageIndexFromCode(php_type code, php_type languages)
+int LanguageIndexFromCode(int code, std::vector<std::string> languages)
 {
     if (code < 0 || code > 1 << count(languages) - 1) {
         // code out of range
         return 0;
     }
-    log = log(code, 2);
-    result = floor(log);
+    float log = log(code, 2);
+    int result = floor(log);
     if (result != log) {
         // choice was more than one language, so use "any"
         result = LanguageIndex("any", languages);

@@ -23,10 +23,9 @@
  * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-php_type soundx_data();
-php_type soundx_name(php_type MyStrArg);
-php_type soundx_place(php_type MyStrArg);
-php_type dmsoundex2(php_type MyStrArg);
+std::string soundx_name(std::string MyStrArg);
+std::string soundx_place(std::string MyStrArg);
+std::string dmsoundex2(std::string MyStrArg);
 
 #else
 #endif

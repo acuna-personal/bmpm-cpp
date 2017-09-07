@@ -51,9 +51,6 @@
     private: php_type _languageRules;
     private: php_type _allLanguagesBitmap;
     public: static void getBMPM(php_type type = BMPM::TYPE_GENERIC);
-    public: static php_type getAllBMPMData();
-    public: php_type getData();
-    public: static php_type getDMData();
     public: static php_type getPhoneticEncoding(php_type name, php_type type = TYPE_GENERIC, php_type language = LANGUAGE_ANY, php_type matching = MATCHING_APPROXIMATE);
     public: php_type getMatchingRules(php_type matching);
     public: php_type getMatchingRulesCommon(php_type matching);

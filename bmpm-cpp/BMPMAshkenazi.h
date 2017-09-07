@@ -1,3 +1,4 @@
+#include "BMPM.h"
 #include "cpp/php2cpp.h"
 
 

@@ -4,6 +4,7 @@
 #ifndef PHONETICENGINE_CPP
 #define PHONETICENGINE_CPP
 
+#include "languages.h"
 #include "phoneticengine.h"
 
 /*
@@ -25,14 +26,14 @@
  * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-php_type RedoLanguage(php_type input, php_type type, php_type allLanguagesBitmap, php_type languageRules, php_type rules, php_type finalRules1, php_type finalRules2, bool concat)
+std::string RedoLanguage(std::string input, std::string type, std::string allLanguagesBitmap, std::string languageRules, std::string rules, std::string finalRules1, std::string finalRules2, bool concat)
 {
     // we can do a better job of determining the language now that multiple names have been split
-    languageArg = Language(input, languageRules, allLanguagesBitmap);
+    std::string languageArg = Language(input, languageRules, allLanguagesBitmap);
     return Phonetic_UTF8(input, type, allLanguagesBitmap, languageRules, rules, finalRules1, finalRules2, languageArg, concat);
 }
 
-php_type Phonetic_UTF8(php_type input, php_type type, php_type allLanguagesBitmap, php_type languageRules, php_type rules, php_type finalRules1, php_type finalRules2, std::string languageArg, bool concat)
+std::string Phonetic_UTF8(std::string input, std::string type, std::string allLanguagesBitmap, std::string languageRules, std::string rules, std::string finalRules1, std::string finalRules2, std::string languageArg, bool concat)
 {
     debug = false;
     if (debug) {
@@ -310,7 +311,7 @@ php_type Phonetic_UTF8(php_type input, php_type type, php_type allLanguagesBitma
     return phonetic;
 }
 
-php_type ApplyFinalRules(php_type phonetic, php_type finalRules, php_type languageArg, php_type strip, php_type debug)
+std::string ApplyFinalRules(std::string phonetic, std::string finalRules, std::string languageArg, std::string strip, std::string debug)
 {
     // optimization to save time
     if (finalRules == "" || count(finalRules) == 0) {
@@ -445,7 +446,7 @@ php_type ApplyFinalRules(php_type phonetic, php_type finalRules, php_type langua
     return phonetic;
 }
 
-php_type Mod(php_type x, php_type y)
+std::string Mod(std::string x, std::string y)
 {
     // use this instead of % to avoid negative results
     mod = x % y;
@@ -455,7 +456,7 @@ php_type Mod(php_type x, php_type y)
     return mod;
 }
 
-php_type PhoneticNumber(php_type phonetic, bool hash)
+std::string PhoneticNumber(std::string phonetic, bool hash)
 {
     if ((bracket = strpos(phonetic, "[")) != /* ORIG: !== */ false) {
         return substr(phonetic, 0, bracket);
@@ -464,7 +465,7 @@ php_type PhoneticNumber(php_type phonetic, bool hash)
     // experimental !!!!
 }
 
-php_type Expand(php_type phonetic)
+std::string Expand(std::string phonetic)
 {
     altStart = strpos(phonetic, "(");
     if (altStart == /* ORIG: === */ false) {
@@ -493,7 +494,7 @@ php_type Expand(php_type phonetic)
     return result;
 }
 
-php_type PhoneticNumbersWithLeadingSpace(php_type phonetic)
+std::string PhoneticNumbersWithLeadingSpace(std::string phonetic)
 {
     altStart = strpos(phonetic, "(");
     if (altStart == /* ORIG: === */ false) {
@@ -516,7 +517,7 @@ php_type PhoneticNumbersWithLeadingSpace(php_type phonetic)
     return result;
 }
 
-php_type PhoneticNumbers(php_type phonetic)
+std::string PhoneticNumbers(std::string phonetic)
 {
     //echo "phonetic=$phonetic<br>";
     //???    $phonetic = RemoveDuplicateAlternates($phonetic);
@@ -533,27 +534,27 @@ php_type PhoneticNumbers(php_type phonetic)
     return result;
 }
 
-php_type isPhoneticVowel(php_type c)
+std::string isPhoneticVowel(std::string c)
 {
     return strpos("Aa4oe5iI9uUE", c) != /* ORIG: !== */ false;
 }
 
-php_type isAOTypeVowel(php_type c)
+std::string isAOTypeVowel(std::string c)
 {
     return strpos("a4o59", c) != /* ORIG: !== */ false;
 }
 
-php_type isEITypeVowel(php_type c)
+std::string isEITypeVowel(std::string c)
 {
     return strpos("eiIy", c) != /* ORIG: !== */ false;
 }
 
-php_type isSZTypeConsonant(php_type c)
+std::string isSZTypeConsonant(std::string c)
 {
     return strpos("sSzZ", c) != /* ORIG: !== */ false;
 }
 
-php_type RemoveDuplicateAlternates(php_type phonetic)
+std::string RemoveDuplicateAlternates(std::string phonetic)
 {
     altString = phonetic;
     altArray = explode("|", altString);
@@ -571,7 +572,7 @@ php_type RemoveDuplicateAlternates(php_type phonetic)
     return result;
 }
 
-php_type NormalizeLanguageAttributes(php_type text, php_type strip)
+std::string NormalizeLanguageAttributes(std::string text, std::string strip)
 {
     // this is applied to a single alternative at a time -- not to a parenthisized list
     // it removes all embedded bracketed attributes, logically-ands them together, and places them at the end.
@@ -600,7 +601,7 @@ php_type NormalizeLanguageAttributes(php_type text, php_type strip)
     }
 }
 
-php_type ApplyRuleIfCompatible(php_type phonetic, php_type target, php_type languageArg)
+std::string ApplyRuleIfCompatible(std::string phonetic, std::string target, std::string languageArg)
 {
     // tests for compatible language rules
     // to do so, apply the rule, expand the results, and detect alternatives with incompatible attributes

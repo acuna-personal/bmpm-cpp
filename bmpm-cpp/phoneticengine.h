@@ -23,21 +23,21 @@
  * along with BMPM.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-php_type RedoLanguage(php_type input, php_type type, php_type allLanguagesBitmap, php_type languageRules, php_type rules, php_type finalRules1, php_type finalRules2, bool concat = false);
-php_type Phonetic_UTF8(php_type input, php_type type, php_type allLanguagesBitmap, php_type languageRules, php_type rules, php_type finalRules1, php_type finalRules2, std::string languageArg = "", bool concat = false);
-php_type ApplyFinalRules(php_type phonetic, php_type finalRules, php_type languageArg, php_type strip, php_type debug);
-php_type Mod(php_type x, php_type y);
-php_type PhoneticNumber(php_type phonetic, bool hash = true);
-php_type Expand(php_type phonetic);
-php_type PhoneticNumbersWithLeadingSpace(php_type phonetic);
-php_type PhoneticNumbers(php_type phonetic);
-php_type isPhoneticVowel(php_type c);
-php_type isAOTypeVowel(php_type c);
-php_type isEITypeVowel(php_type c);
-php_type isSZTypeConsonant(php_type c);
-php_type RemoveDuplicateAlternates(php_type phonetic);
-php_type NormalizeLanguageAttributes(php_type text, php_type strip);
-php_type ApplyRuleIfCompatible(php_type phonetic, php_type target, php_type languageArg);
+std::string RedoLanguage(std::string input, std::string type, std::string allLanguagesBitmap, std::string languageRules, std::string rules, std::string finalRules1, std::string finalRules2, bool concat = false);
+std::string Phonetic_UTF8(std::string input, std::string type, std::string allLanguagesBitmap, std::string languageRules, std::string rules, std::string finalRules1, std::string finalRules2, std::string languageArg = "", bool concat = false);
+std::string ApplyFinalRules(std::string phonetic, std::string finalRules, std::string languageArg, std::string strip, std::string debug);
+std::string Mod(std::string x, std::string y);
+std::string PhoneticNumber(std::string phonetic, bool hash = true);
+std::string Expand(std::string phonetic);
+std::string PhoneticNumbersWithLeadingSpace(std::string phonetic);
+std::string PhoneticNumbers(std::string phonetic);
+std::string isPhoneticVowel(std::string c);
+std::string isAOTypeVowel(std::string c);
+std::string isEITypeVowel(std::string c);
+std::string isSZTypeConsonant(std::string c);
+std::string RemoveDuplicateAlternates(std::string phonetic);
+std::string NormalizeLanguageAttributes(std::string text, std::string strip);
+std::string ApplyRuleIfCompatible(std::string phonetic, std::string target, std::string languageArg);
 
 #else
 #endif
