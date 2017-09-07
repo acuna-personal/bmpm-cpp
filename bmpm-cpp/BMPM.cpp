@@ -37,30 +37,32 @@
     const std::string LANGUAGE_RUSSIAN = "russian";
     const std::string LANGUAGE_SPANISH = "spanish";
     const std::string LANGUAGE_TURKISH = "turkish";
-    php_type BMPM::getBMPM(php_type type)
+    const std::string MATCHING_APPROXIMATE = "approx";
+    const std::string MATCHING_EXACT = "exact";
+    const std::string MATCHING_HEBREW = "hebrew";
+    void BMPM::getBMPM(php_type type)
     {
-        bmpm = NULL;
+        static php_type _bmpmAshkenazi = NULL;
+        static php_type _bmpmGeneric = NULL;
+        static php_type _bmpmSephardic = NULL;
         switch (type) {
             case BMPM::TYPE_SEPHARDIC:
-                if (BMPM::_bmpmSephardic == NULL) {
-                    BMPM::_bmpmSephardic = /* TODO: Mem mgmt */ new BMPMSephardic();
+                if (_bmpmSephardic == /* ORIG: === */ NULL) {
+                    _bmpmSephardic = /* TODO: Mem mgmt */ new BMPMSephardic();
                 }
-                bmpm = BMPM::_bmpmSephardic;
-                break;
+                return _bmpmSephardic;
             case BMPM::TYPE_ASHKENAZI:
-                if (BMPM::_bmpmAshkenazi == NULL) {
-                    BMPM::_bmpmAshkenazi = /* TODO: Mem mgmt */ new BMPMAshkenazi();
+                if (_bmpmAshkenazi == /* ORIG: === */ NULL) {
+                    _bmpmAshkenazi = /* TODO: Mem mgmt */ new BMPMAshkenazi();
                 }
-                bmpm = BMPM::_bmpmAshkenazi;
-                break;
+                return _bmpmAshkenazi;
             case BMPM::TYPE_GENERIC:
             default:
-                if (BMPM::_bmpmGeneric == NULL) {
-                    BMPM::_bmpmGeneric = /* TODO: Mem mgmt */ new BMPMGeneric();
+                if (_bmpmGeneric == /* ORIG: === */ NULL) {
+                    _bmpmGeneric = /* TODO: Mem mgmt */ new BMPMGeneric();
                 }
-                bmpm = BMPM::_bmpmGeneric;
+                return _bmpmGeneric;
         }
-        return bmpm;
     }
     php_type BMPM::getAllBMPMData()
     {
@@ -68,13 +70,13 @@
     }
     php_type BMPM::getData()
     {
-        return utf8ize({"languageNames" => this->getLanguageNames(), "rules" => this->getRules(), "exact" => this->getExact(), "exactCommon" => this->getExactCommon(), "approx" => this->getApprox(), "approxCommon" => this->getApproxCommon(), "languageRules" => this->getLanguageRules(), "allLanguagesBitmap" => this->getAllLanguagesBitmap()});
+        return utf8ize({"languageNames" => this->getLanguageNames(), "rules" => this->getRules(), "exact" => this->getExact(), "exactCommon" => this->getExactCommon(), "approx" => this->getApprox(), "approxCommon" => this->getApproxCommon(), "hebrew" => this->getHebrew(), "hebrewCommon" => this->getHebrewCommon(), "languageRules" => this->getLanguageRules(), "allLanguagesBitmap" => this->getAllLanguagesBitmap()});
     }
     php_type BMPM::getDMData()
     {
         return soundx_data();
     }
-    php_type BMPM::getPhoneticEncoding(php_type name, php_type type, php_type language, bool exact)
+    php_type BMPM::getPhoneticEncoding(php_type name, php_type type, php_type language, php_type matching)
     {
         bmpm = BMPM::getBMPM(type);
         if (bmpm == NULL) {
@@ -91,8 +93,8 @@
             }
         }
         rules = bmpm.getRules();
-        equivalencyRules = exact ? bmpm.getExact() : bmpm.getApprox();
-        equivalencyRulesCommon = exact ? bmpm.getExactCommon() : bmpm.getApproxCommon();
+        matchingRules = bmpm.getMatchingRules(matching);
+        matchingRulesCommon = bmpm.getMatchingRulesCommon(matching);
         allLanguagesBitmap = bmpm.getAllLanguagesBitmap();
         languages = bmpm.getLanguageNames();
         languageRules = bmpm.getLanguageRules();
@@ -103,29 +105,53 @@
         }
         idx = LanguageIndexFromCode(languageCode, languages);
         //echo "$name => " . LanguageName($idx, $languages) . "\n";
-        if (!equivalencyRules) {
+        if (!matchingRules) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
-            std::cout << "getPhoneticEncoding: No equivalencyRules for (" + name + ", " + type + ", " + language + ", " + exact + ")\n";
+            std::cout << "getPhoneticEncoding: No matching rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
-        if (!equivalencyRulesCommon) {
+        if (!matchingRulesCommon) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
-            std::cout << "getPhoneticEncoding: No equivalencyRulesCommon for (" + name + ", " + type + ", " + language + ", " + exact + ")\n";
+            std::cout << "getPhoneticEncoding: No matching rules common for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
         if (!isset(rules[idx])) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
-            std::cout << "getPhoneticEncoding: No rules for (" + name + ", " + type + ", " + language + ", " + exact + ")\n";
+            std::cout << "getPhoneticEncoding: No rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
-        if (!isset(equivalencyRules[idx])) {
+        if (!isset(matchingRules[idx])) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
-            std::cout << "getPhoneticEncoding: No equivalencyRules for (" + name + ", " + type + ", " + language + ", " + exact + ")\n";
+            std::cout << "getPhoneticEncoding: No matching rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
-        result = Phonetic_UTF8(name, type, allLanguagesBitmap, languageRules, rules[idx], equivalencyRulesCommon, equivalencyRules[idx], languageCode, exact);
+        result = Phonetic_UTF8(name, type, allLanguagesBitmap, languageRules, rules[idx], matchingRulesCommon, matchingRules[idx], languageCode, matching == BMPM::MATCHING_EXACT);
         numbers = PhoneticNumbers(result);
         return numbers;
+    }
+    php_type BMPM::getMatchingRules(php_type matching)
+    {
+        switch (matching) {
+            case BMPM::MATCHING_APPROXIMATE:
+                return this->getApprox();
+            case BMPM::MATCHING_HEBREW:
+                return this->getHebrew();
+            case BMPM::MATCHING_EXACT:
+                return this->getExact();
+        }
+        return NULL;
+    }
+    php_type BMPM::getMatchingRulesCommon(php_type matching)
+    {
+        switch (matching) {
+            case BMPM::MATCHING_APPROXIMATE:
+                return this->getApproxCommon();
+            case BMPM::MATCHING_HEBREW:
+                return this->getHebrewCommon();
+            case BMPM::MATCHING_EXACT:
+                return this->getExactCommon();
+        }
+        return NULL;
     }
     php_type BMPM::getDaitchMotokoffSoundex(php_type name)
     {
@@ -187,6 +213,22 @@
     void BMPM::setExactCommon(php_type exactCommon)
     {
         this->_exactCommon = exactCommon;
+    }
+    php_type BMPM::getHebrew()
+    {
+        return this->_hebrew;
+    }
+    void BMPM::setHebrew(php_type exact)
+    {
+        this->_hebrew = hbrew;
+    }
+    php_type BMPM::getHebrewCommon()
+    {
+        return this->_hebrewCommon;
+    }
+    void BMPM::setHebrewCommon(php_type hebrewCommon)
+    {
+        this->_hebrewCommon = hebrewCommon;
     }
     php_type BMPM::getRules()
     {

@@ -13,6 +13,8 @@ BMPMGeneric::BMPMGeneric()
         this->setApproxCommon(approxCommon);
         #include "gen/exactcommon.h"
         this->setExactCommon(exactCommon);
+        #include "gen/hebrewcommon.h"
+        this->setHebrewCommon(hebrewCommon);
         #include "gen/languagenames.h"
         this->setLanguageNames(languages);
         #include "gen/lang.h"

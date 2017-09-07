@@ -30,30 +30,38 @@ int main(int argc, const char * argv[]);
         }
         comps = explode("\t", trim(line, "\n\r"));
         // some lines may have trailing tabs which we must keep
-        if (count(comps) != 6) {
+        if (count(comps) != 7) {
             std::cout << "" + inputFileName + ":" + ln + " invalid line: " + line + "\n";
             fails++;
             beep();
             continue;
         }
-        list(name, typeName, languageName, bmpmExactExpected, bmpmApproxExpected, soundexExpected) = comps;
+        list(name, typeName, languageName, bmpmExactExpected, bmpmApproxExpected, bmpmHebrewExpected, soundexExpected) = comps;
         if (debug) {
             std::cout << "" + inputFileName + ":" + ln + " [[" + name + " " + typeName + " " + languageName + "]]\n";
         }
         try {
             // TODO: Order shouldn't matter for any of these
-            bmpmApproxActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), false);
+            bmpmApproxActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), BMPM::MATCHING_APPROXIMATE);
             if (bmpmApproxActual != bmpmApproxExpected) {
                 std::cout << "" + inputFileName + ":" + ln + " BMPM::getPhoneticEncoding failed: [[" + name + " " + typeName + " " + languageName + " approx]]\n[[expected]] " + bmpmApproxExpected + "\n  [[actual]] " + bmpmApproxActual + "\n";
                 fails++;
                 beep();
             }
-            bmpmExactActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), true);
+            bmpmExactActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), BMPM::MATCHING_EXACT);
             if (bmpmExactActual != bmpmExactExpected) {
                 std::cout << "" + inputFileName + ":" + ln + " BMPM::getPhoneticEncoding failed: [[" + name + " " + typeName + " " + languageName + " exact]]\n[[expected]] " + bmpmExactExpected + "\n  [[actual]] " + bmpmExactActual + "\n";
                 fails++;
                 beep();
             }
+            /*
+                  $bmpmHebrewActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), BMPM::MATCHING_HEBREW);
+                  if ($bmpmHebrewActual != $bmpmHebrewExpected) {
+                    echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName hebrew]]\n[[expected]] $bmpmHebrewExpected\n  [[actual]] $bmpmHebrewActual\n";
+                    $fails++;
+                    beep();
+                  }
+            */
             soundexExpected = trim(soundexExpected);
             soundexActual = BMPM::getDaitchMotokoffSoundex(name);
             if (soundexExpected != soundexActual) {
@@ -65,8 +73,7 @@ int main(int argc, const char * argv[]);
             std::cout << "" + inputFileName + ":" + ln + " [[" + name + " " + typeName + " " + languageName + "]]\n";
             std::cout << e.getMessage() + "\n";
             std::cout << e.getTraceAsString() + "\n";
-            fails++;
-            beep();
+            return 1;
         }
         ln++;
     }

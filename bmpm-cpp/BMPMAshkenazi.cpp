@@ -13,6 +13,8 @@ BMPMAshkenazi::BMPMAshkenazi()
         this->setApproxCommon(approxCommon);
         #include "ash/exactcommon.h"
         this->setExactCommon(exactCommon);
+        #include "ash/hebrewcommon.h"
+        this->setHebrewCommon(hebrewCommon);
         #include "ash/languagenames.h"
         this->setLanguageNames(languages);
         #include "ash/lang.h"

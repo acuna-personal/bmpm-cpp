@@ -13,6 +13,8 @@ BMPMSephardic::BMPMSephardic()
         this->setApproxCommon(approxCommon);
         #include "sep/exactcommon.h"
         this->setExactCommon(exactCommon);
+        #include "sep/hebrewcommon.h"
+        this->setHebrewCommon(hebrewCommon);
         #include "sep/languagenames.h"
         this->setLanguageNames(languages);
         #include "sep/lang.h"
