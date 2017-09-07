@@ -473,6 +473,8 @@ if (($bracket=strpos($phonetic, "[")) !== false) {
   return substr($phonetic, 0, $bracket);
 }
 return ($phonetic); // experimental !!!!
+
+/***IFNCPP***/
     $phoneticLetters = "!bdfghjklmnNprsSt68vwzZxAa4oe5iI9uUEyQY"; // true phonetic letters
     $phoneticLetters .= "1BCDEHJKLOTUVWX"; // metaphonetic letters
     // dummy first letter, otherwise b would be treated as 0 and have no effect on result
@@ -508,6 +510,7 @@ $result = $result & 0x7fffffff;
       $result += $j;
     }
     return dechex($result);
+  /***ENDIFNCPP***/
   }
 
   function Expand($phonetic) {

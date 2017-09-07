@@ -462,44 +462,6 @@ php_type PhoneticNumber(php_type phonetic, bool hash)
     }
     return phonetic;
     // experimental !!!!
-    phoneticLetters = "!bdfghjklmnNprsSt68vwzZxAa4oe5iI9uUEyQY";
-    // true phonetic letters
-    phoneticLetters += "1BCDEHJKLOTUVWX";
-    // metaphonetic letters
-    // dummy first letter, otherwise b would be treated as 0 and have no effect on result
-    metaPhoneticLetters = "";
-    // added letters to be used in finalxxx.php rules
-    result = 0;
-    for (i = 0; i < strlen(phonetic); i++) {
-        if (substr(phonetic, i, 1) == "#") {
-            // it's a meta phonetic letter
-            if (i == strlen(phonetic) - 1) {
-                std::cout << "fatal error: invalid metaphonetic letter at position " + (i + 1) + " in " + phonetic + "<br>";
-                exit;
-                return -1;
-            }
-            i++;
-            j = strpos(metaPhoneticLetters, substr(phonetic, i, 1));
-            if (j != /* ORIG: !== */ false) {
-                j += strlen(phoneticLetters);
-            }
-        } else {
-            j = strpos(phoneticLetters, substr(phonetic, i, 1));
-        }
-        if (j == /* ORIG: === */ false) {
-            std::cout << "fatal error: invalid phonetic letter at position " + (i + 1) + " in " + phonetic + "<br>";
-            exit;
-            return -1;
-        }
-        result *= strlen(phoneticLetters) + strlen(metaPhoneticLetters);
-        if (hash) {
-            //$result = $result & 0xff;
-            result = result & 0x7fffffff;
-            //        $result = Mod($result, 999999999);
-        }
-        result += j;
-    }
-    return dechex(result);
 }
 
 php_type Expand(php_type phonetic)
