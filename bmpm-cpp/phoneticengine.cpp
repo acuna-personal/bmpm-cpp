@@ -1,8 +1,10 @@
 #include "cpp/php2cpp.h"
 
-
 #ifndef PHONETICENGINE_CPP
 #define PHONETICENGINE_CPP
+
+#define debug false;
+
 
 #include "languages.h"
 #include "phoneticengine.h"
@@ -35,7 +37,6 @@ std::string RedoLanguage(std::string input, std::string type, std::string allLan
 
 std::string Phonetic_UTF8(std::string input, std::string type, std::string allLanguagesBitmap, std::string languageRules, std::string rules, std::string finalRules1, std::string finalRules2, std::string languageArg, bool concat)
 {
-    debug = false;
     if (debug) {
         std::cout << "<hr>";
     }
@@ -311,10 +312,10 @@ std::string Phonetic_UTF8(std::string input, std::string type, std::string allLa
     return phonetic;
 }
 
-std::string ApplyFinalRules(std::string phonetic, std::string finalRules, std::string languageArg, std::string strip, std::string debug)
+std::string ApplyFinalRules(std::string phonetic, std::vector finalRules, std::string languageArg, std::string strip)
 {
     // optimization to save time
-    if (finalRules == "" || count(finalRules) == 0) {
+    if (finalRules == NULL || count(finalRules) == 0) {
         return phonetic;
     }
     // format of $rules array

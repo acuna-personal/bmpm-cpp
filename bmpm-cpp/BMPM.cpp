@@ -105,7 +105,7 @@
         }
         idx = LanguageIndexFromCode(languageCode, languages);
         //echo "$name => " . LanguageName($idx, $languages) . "\n";
-        if (!matchingRules) {
+        if (matching != BMPM::MATCHING_HEBREW && !matchingRules) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
             std::cout << "getPhoneticEncoding: No matching rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
@@ -120,12 +120,21 @@
             std::cout << "getPhoneticEncoding: No rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
-        if (!isset(matchingRules[idx])) {
+        if (matching != BMPM::MATCHING_HEBREW && !isset(matchingRules[idx])) {
             std::cout << "" + name + " => " + LanguageName(idx, languages) + "\n";
             std::cout << "getPhoneticEncoding: No matching rules for (" + name + ", " + type + ", " + language + ", " + matching + ")\n";
             return NULL;
         }
-        result = Phonetic_UTF8(name, type, allLanguagesBitmap, languageRules, rules[idx], matchingRulesCommon, matchingRules[idx], languageCode, matching == BMPM::MATCHING_EXACT);
+        result = Phonetic_UTF8(
+            name,
+            type,
+            allLanguagesBitmap,
+            languageRules,
+            rules[idx],
+            matchingRulesCommon,
+            matching == BMPM::MATCHING_HEBREW ? NULL : matchingRules[idx],
+            languageCode,
+            matching == BMPM::MATCHING_EXACT);
         numbers = PhoneticNumbers(result);
         return numbers;
     }

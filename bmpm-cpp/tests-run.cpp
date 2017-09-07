@@ -54,14 +54,14 @@ int main(int argc, const char * argv[]);
                 fails++;
                 beep();
             }
-            /*
-                  $bmpmHebrewActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), BMPM::MATCHING_HEBREW);
-                  if ($bmpmHebrewActual != $bmpmHebrewExpected) {
-                    echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName hebrew]]\n[[expected]] $bmpmHebrewExpected\n  [[actual]] $bmpmHebrewActual\n";
-                    $fails++;
-                    beep();
-                  }
-            */
+
+            bmpmHebrewActual = BMPM::getPhoneticEncoding(name, BMPMTypeForName(typeName), BMPMLanguageForName(languageName), BMPM::MATCHING_HEBREW);
+            if (bmpmHebrewActual != bmpmHebrewExpected) {
+              std::cout << inputFileName + ":" . ln . " BMPM::getPhoneticEncoding failed: [[" + name + " " + typeName + " " + languageName + " " + " hebrew]]\n[[expected]] " + bmpmHebrewExpected + "\n  [[actual]] " + bmpmHebrewActual + "\n";
+              $fails++;
+              beep();
+            }
+
             soundexExpected = trim(soundexExpected);
             soundexActual = BMPM::getDaitchMotokoffSoundex(name);
             if (soundexExpected != soundexActual) {
