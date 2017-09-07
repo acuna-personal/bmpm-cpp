@@ -48,38 +48,33 @@ abstract class BMPM {
 	private $_languageRules;
 	private $_allLanguagesBitmap;
 
-	private static $_bmpmAshkenazi;
-	private static $_bmpmGeneric;
-	private static $_bmpmSephardic;
-
 	public static function getBMPM($type = BMPM::TYPE_GENERIC) {
-		$bmpm = null;
+		static $_bmpmAshkenazi = null;
+		static $_bmpmGeneric = null;
+		static $_bmpmSephardic = null;
 		switch ($type) {
 			case BMPM::TYPE_SEPHARDIC:
-				if (BMPM::$_bmpmSephardic == null) {
-					BMPM::$_bmpmSephardic = new BMPMSephardic();
+				if ($_bmpmSephardic === null) {
+					$_bmpmSephardic = new BMPMSephardic();
 				}
 
-				$bmpm = BMPM::$_bmpmSephardic;
-				break;
+				return $_bmpmSephardic;
 
 			case BMPM::TYPE_ASHKENAZI:
-				if (BMPM::$_bmpmAshkenazi == null) {
-					BMPM::$_bmpmAshkenazi = new BMPMAshkenazi();
+				if ($_bmpmAshkenazi === null) {
+					$_bmpmAshkenazi = new BMPMAshkenazi();
 				}
 
-				$bmpm = BMPM::$_bmpmAshkenazi;
-				break;
+				return $_bmpmAshkenazi;
 
 			case BMPM::TYPE_GENERIC:
 			default:
-				if (BMPM::$_bmpmGeneric == null) {
-					BMPM::$_bmpmGeneric = new BMPMGeneric();
+				if ($_bmpmGeneric === null) {
+					$_bmpmGeneric = new BMPMGeneric();
 				}
 
-				$bmpm = BMPM::$_bmpmGeneric;
+				return $_bmpmGeneric;
 		}
-		return $bmpm;
 	}
 
 	public static function getAllBMPMData() {
