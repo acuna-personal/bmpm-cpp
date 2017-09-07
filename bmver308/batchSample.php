@@ -21,10 +21,7 @@
    *
    */
 
-  set_time_limit(3000); // removes any time limits on execution time
-  ini_set('max_execution_time',3000);
-
-  $type = $_GET['type']; // ash, sep, or gen
+  $type = $argv[3]; // ash, sep, or gen
   if ($type == "") {
     $type = "gen"; // generic
   }
@@ -32,18 +29,18 @@
   include "phoneticutils.php";
   include "phoneticengine.php";
   include "$type/approxcommon.php";
+  include "$type/exactcommon.php";
   include "$type/lang.php";
   include "dmsoundex.php";
 
   for ($i=0; $i<count($languages); $i++) {
     include "$type/rules" . $languages[$i] . ".php";
+    include "$type/exact" . $languages[$i] . ".php";
     include "$type/approx" . $languages[$i] . ".php";
   }
 
-  $inputFileName = $_GET['inputFileName'];
-  $outputFileName = $_GET['outputFileName'];
-  $languageName = $_GET['language'];
-  $languageCode = LanguageCode($languageName, $languages);
+  $inputFileName = $argv[1];
+  $outputFileName = $argv[2];
 
   // open input and output files
   
@@ -64,7 +61,12 @@
   $lines = file($inputFileName);
   for ($ln=0; $ln<count($lines); $ln++){
 if (($ln+1)%100 == 0) echo ($ln+1) . " of " . count($lines) . "<br>";
-    $name = trim($lines[$ln]);
+    $comps = explode("\t", $lines[$ln]);
+    $name = $comps[0];
+    $languageName = $comps[1];
+    // comps[2] and comps[3] aren't yet supported
+
+    $languageCode = LanguageCode($languageName, $languages);
     if ($languageName == "auto" || $languageName == "") {
       $languageCode2 = Language_UTF8($name, $languageRules);
     } else {
