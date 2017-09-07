@@ -21,16 +21,28 @@
    *
    */
 
-  include_once "approxfrench.php";
+// Ashkenazic
+include_once "exactapproxcommon.php";
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
+$exactCommon = array(
+    array("H","","","h"),
+ 
+// VOICED - UNVOICED CONSONANTS
+
+    array("s","[^t]","[bgZd]","z"),
+    array("Z","","[pfkst]","S"),
+    array("Z","","$","S"),
+    array("S","","[bgzd]","Z"),
+    array("z","","$","s"),
+    
+    array("ji","[aAoOeEiIuU]","","j"),
+    array("jI","[aAoOeEiIuU]","","j"),
+    array("je","[aAoOeEiIuU]","","j"),
+    array("jE","[aAoOeEiIuU]","","j"),
+    
+    array("exactapproxcommon plus exactcommon")
    );
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+$exactCommon = array_merge($exactApproxCommon, $exactCommon);
 
-?>
+?> 

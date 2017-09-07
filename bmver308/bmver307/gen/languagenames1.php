@@ -21,16 +21,9 @@
    *
    */
 
-  include_once "approxfrench.php";
-
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
-
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+  $languages = array
+    ("any", "arabic", "cyrillic", "czech", "dutch", "english", "french", "german", "germandjsg", "greek",
+     "greeklatin", "hebrew", "hungarian", "italian", "latvian", "polish", "polishdjskp", "portuguese","romanian",
+     "russian", "russiandjsre", "spanish", "turkish");
 
 ?>

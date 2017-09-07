@@ -1,8 +1,8 @@
 <?php
-
+  
   /*
    *
-   * Copyright Alexander Beider and Stephen P. Morse, 2008
+   * Copyright Alexander Beider and Stephen P. Morse, 2011
    *
    * This file is part of the Beider-Morse Phonetic Matching (BMPM) System. 
 
@@ -21,16 +21,14 @@
    *
    */
 
-  include_once "approxfrench.php";
-
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
+ $exactArabic = array(
+ 
+    array ("1", "", "", ""),
+            
+    array("exactarabic")
+       
    );
+ 
+  $exact[LanguageIndex("arabic", $languages)] = $exactArabic;
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
-
-?>
+?> 

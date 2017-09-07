@@ -21,16 +21,9 @@
    *
    */
 
-  include_once "approxfrench.php";
+  // this file uses the same rules as exactrussian.php
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+  include_once "exactrussian.php";
+  $exact[LanguageIndex("hungarian", $languages)] = $exactRussian;
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
-
-?>
+?> 

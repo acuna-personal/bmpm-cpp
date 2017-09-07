@@ -21,16 +21,14 @@
    *
    */
 
-  include_once "approxfrench.php";
+// SEPHARDIC 
+$approxAny = array(
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+  array("E","","",""), // Final French "e"
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+  array("approxany")      
+  );
 
-?>
+  $approx[LanguageIndex("any", $languages)] = $approxAny;
+
+?> 

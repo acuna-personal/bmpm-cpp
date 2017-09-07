@@ -21,16 +21,27 @@
    *
    */
 
-  include_once "approxfrench.php";
+// Sephardic  
+include_once "exactapproxcommon.php";
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+$exactCommon = array(
+    array("h","","",""),
+  //array("C","","","k"),  // c that can actually be ç
+ 
+ // VOICED - UNVOICED CONSONANTS
+    array("s","[^t]","[bgZd]","z"),
+    array("Z","","[pfkst]","S"),
+    array("Z","","$","S"),
+    array("S","","[bgzd]","Z"),
+    array("z","","$","s"),
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+  //special character to deal correctly in Hebrew match
+    array("B","","","b"),
+    array("V","","","v"),
+    
+    array("exactapproxcommon plus exactcommon") 
+ );
 
-?>
+$exactCommon = array_merge($exactApproxCommon, $exactCommon);
+
+?> 

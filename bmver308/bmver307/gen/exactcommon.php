@@ -2,7 +2,7 @@
 
   /*
    *
-   * Copyright Alexander Beider and Stephen P. Morse, 2008
+   * Copyright Alexander Beider and Stephen Morse, 2008
    *
    * This file is part of the Beider-Morse Phonetic Matching (BMPM) System. 
 
@@ -21,16 +21,27 @@
    *
    */
 
-  include_once "approxfrench.php";
+// GENERAL
+include_once "exactapproxcommon.php";
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
+$exactCommon = array(
+     array("H","","",""),
+ 
+// VOICED - UNVOICED CONSONANTS
+    array("s","[^t]","[bgZd]","z"),
+    array("Z","","[pfkst]","S"),
+    array("Z","","$","S"),
+    array("S","","[bgzd]","Z"),
+    array("z","","$","s"),
+    
+    array("ji","[aAoOeEiIuU]","","j"),
+    array("jI","[aAoOeEiIuU]","","j"),
+    array("je","[aAoOeEiIuU]","","j"),
+    array("jE","[aAoOeEiIuU]","","j"),
+      
+    array("exactapproxcommon plus exactcommon")
    );
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
+$exactCommon = array_merge($exactApproxCommon, $exactCommon);
 
-?>
+?> 

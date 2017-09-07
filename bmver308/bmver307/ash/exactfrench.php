@@ -21,16 +21,12 @@
    *
    */
 
-  include_once "approxfrench.php";
+ //   For Ashkenazic searches: 
+ //this file uses the same rules as exactrussian.php
+ include_once "exactrussian.php";
+ $exact[LanguageIndex("french", $languages)] = $exactRussian;
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
+?> 
 
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
 
-?>
+

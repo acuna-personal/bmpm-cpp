@@ -21,16 +21,10 @@
    *
    */
 
+// this file uses the same rules as approxfrench.php
+
   include_once "approxfrench.php";
 
-  $approxGreeklatin = array(
-    array("N","","",""),
-          
-    array("approxfrench plus approxgreeklatin")
-   );
-
-  array_pop($approxFrench);
-  $approxGreeklatin = array_merge($approxFrench, $approxGreeklatin);
-  $approx[LanguageIndex("greeklatin", $languages)] = $approxGreeklatin;
-
-?>
+  $approx[LanguageIndex("turkish", $languages)] = $approxFrench;
+  
+?> 
