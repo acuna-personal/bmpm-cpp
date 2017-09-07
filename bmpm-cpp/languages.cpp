@@ -67,12 +67,12 @@ php_type LanguageName(php_type index, php_type languages)
 
 php_type LanguageCode(php_type langName, php_type languages)
 {
-    return pow(2, LanguageIndex(langName, languages));
+    return 1 << LanguageIndex(langName, languages);
 }
 
 php_type LanguageIndexFromCode(php_type code, php_type languages)
 {
-    if (code < 0 || code > pow(2, count(languages) - 1)) {
+    if (code < 0 || code > 1 << count(languages) - 1) {
         // code out of range
         return 0;
     }

@@ -31,8 +31,9 @@ int main(int argc, const char * argv[]);
         comps = explode("\t", trim(line, "\n\r"));
         // some lines may have trailing tabs which we must keep
         if (count(comps) != 6) {
-            std::cout << "" + inputFileName + ":" + ln + " invalid line: " + lines[ln] + "\n";
+            std::cout << "" + inputFileName + ":" + ln + " invalid line: " + line + "\n";
             fails++;
+            beep();
             continue;
         }
         list(name, typeName, languageName, bmpmExactExpected, bmpmApproxExpected, soundexExpected) = comps;
