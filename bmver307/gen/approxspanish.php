@@ -21,13 +21,16 @@
    *
    */
 
-   $exactDutch = array(
-       
-       array("exactdutch")
+  include_once "approxfrench.php";
+
+  $approxSpanish = array(
+    array("B","","","(b|v)"),
+    array("V","","","(b|v)"),
+      
+    array("approxfrench plus approxspanish")
    );
- 
-  $exact[LanguageIndex("dutch", $languages)] = $exactDutch;
-    
-    
-    
+
+  $approxSpanish = array_merge($approxFrench, $approxSpanish);
+
+  
 ?> 
