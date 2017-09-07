@@ -32,6 +32,10 @@ abstract class BMPM {
 	const LANGUAGE_SPANISH = "spanish";
 	const LANGUAGE_TURKISH = "turkish";
 
+	const MATCHING_APPROXIMATE = "approx";
+	const MATCHING_EXACT = "exact";
+	const MATCHING_HEBREW = "hebrew";
+
 	private $_type;
 	private $_languageNames;
 	private $_rules;
@@ -39,6 +43,8 @@ abstract class BMPM {
 	private $_exactCommon;
 	private $_approx;
 	private $_approxCommon;
+	private $_hebrew;
+	private $_hebrewCommon;
 	private $_languageRules;
 	private $_allLanguagesBitmap;
 
@@ -92,6 +98,8 @@ abstract class BMPM {
 			'exactCommon' => $this->getExactCommon(),
 			'approx' => $this->getApprox(),
 			'approxCommon' => $this->getApproxCommon(),
+			'hebrew' => $this->getHebrew(),
+			'hebrewCommon' => $this->getHebrewCommon(),
 			'languageRules' => $this->getLanguageRules(),
 			'allLanguagesBitmap' => $this->getAllLanguagesBitmap(),
 			));
@@ -101,7 +109,7 @@ abstract class BMPM {
 		return soundx_data();
 	}
 
-	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY, $exact = true) {
+	public static function getPhoneticEncoding($name, $type = TYPE_GENERIC, $language = LANGUAGE_ANY, $matching = MATCHING_APPROXIMATE) {
 		$bmpm = BMPM::getBMPM($type);
 		if ($bmpm == null) {
 			echo "Null bmpm";
@@ -119,8 +127,8 @@ abstract class BMPM {
 		}
 
 		$rules = $bmpm->getRules();
-		$equivalencyRules = $exact ? $bmpm->getExact() : $bmpm->getApprox();
-		$equivalencyRulesCommon = $exact ? $bmpm->getExactCommon() : $bmpm->getApproxCommon();
+		$matchingRules = $bmpm->getMatchingRules($matching);
+		$matchingRulesCommon = $bmpm->getMatchingRulesCommon($matching);
 		$allLanguagesBitmap = $bmpm->getAllLanguagesBitmap();
 		$languages = $bmpm->getLanguageNames();
 		$languageRules = $bmpm->getLanguageRules();
@@ -135,27 +143,27 @@ abstract class BMPM {
 
 		//echo "$name => " . LanguageName($idx, $languages) . "\n";
 
-		if (!$equivalencyRules) {
+		if (!$matchingRules) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
+			echo "getPhoneticEncoding: No matching rules for ($name, $type, $language, $matching)\n";
 			return null;
 		}
 
-		if (!$equivalencyRulesCommon) {
+		if (!$matchingRulesCommon) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No equivalencyRulesCommon for ($name, $type, $language, $exact)\n";
+			echo "getPhoneticEncoding: No matching rules common for ($name, $type, $language, $matching)\n";
 			return null;
 		}
 
 		if (!isset($rules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No rules for ($name, $type, $language, $exact)\n";
+			echo "getPhoneticEncoding: No rules for ($name, $type, $language, $matching)\n";
 			return null;
 		}
 
-		if (!isset($equivalencyRules[$idx])) {
+		if (!isset($matchingRules[$idx])) {
 			echo "$name => " . LanguageName($idx, $languages) . "\n";
-			echo "getPhoneticEncoding: No equivalencyRules for ($name, $type, $language, $exact)\n";
+			echo "getPhoneticEncoding: No matching rules for ($name, $type, $language, $matching)\n";
 			return null;
 		}
 
@@ -165,14 +173,38 @@ abstract class BMPM {
 			$allLanguagesBitmap,
 			$languageRules,
 			$rules[$idx],
-			$equivalencyRulesCommon,
-			$equivalencyRules[$idx],
+			$matchingRulesCommon,
+			$matchingRules[$idx],
 			$languageCode,
-			$exact // concatenate iff it is an exact match
+			$matching == BMPM::MATCHING_EXACT // concatenate iff it is an exact match
 			);
 		$numbers = PhoneticNumbers($result);
 
 		return $numbers;
+	}
+
+	public function getMatchingRules($matching) {
+		switch ($matching) {
+			case BMPM::MATCHING_APPROXIMATE:
+				return $this->getApprox();
+			case BMPM::MATCHING_HEBREW:
+				return $this->getHebrew();
+			case BMPM::MATCHING_EXACT:
+				return $this->getExact();
+		}
+		return null;
+	}
+
+	public function getMatchingRulesCommon($matching) {
+		switch ($matching) {
+			case BMPM::MATCHING_APPROXIMATE:
+				return $this->getApproxCommon();
+			case BMPM::MATCHING_HEBREW:
+				return $this->getHebrewCommon();
+			case BMPM::MATCHING_EXACT:
+				return $this->getExactCommon();
+		}
+		return null;
 	}
 
 	public static function getDaitchMotokoffSoundex($name) {
@@ -234,6 +266,22 @@ abstract class BMPM {
 
 	public function setExactCommon($exactCommon) {
 		$this->_exactCommon = $exactCommon;
+	}
+
+	public function getHebrew() {
+		return $this->_hebrew;
+	}
+
+	public function setHebrew($exact) {
+		$this->_hebrew = $hbrew;
+	}
+
+	public function getHebrewCommon() {
+		return $this->_hebrewCommon;
+	}
+
+	public function setHebrewCommon($hebrewCommon) {
+		$this->_hebrewCommon = $hebrewCommon;
 	}
 
 	public function getRules() {

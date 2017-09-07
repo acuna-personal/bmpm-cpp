@@ -10,6 +10,9 @@ class BMPMGeneric extends BMPM {
 		include "gen/exactcommon.php";
 		$this->setExactCommon($exactCommon);
 
+		include "gen/hebrewcommon.php";
+		$this->setHebrewCommon($hebrewCommon);
+
 		include "gen/languagenames.php";
 		$this->setLanguageNames($languages);
 		

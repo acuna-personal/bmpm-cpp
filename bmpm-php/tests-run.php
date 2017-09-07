@@ -47,14 +47,14 @@ function main($argc, $argv) {
     }
     
     $comps = explode("\t", trim($line, "\n\r")); // some lines may have trailing tabs which we must keep
-    if (count($comps) != 6) {
+    if (count($comps) != 7) {
       echo "$inputFileName:" . $ln . " invalid line: " . $line . "\n";
       $fails++;
       beep();
       continue;
     }
 
-    list($name, $typeName, $languageName, $bmpmExactExpected, $bmpmApproxExpected, $soundexExpected) = $comps;
+    list($name, $typeName, $languageName, $bmpmExactExpected, $bmpmApproxExpected, $bmpmHebrewExpected, $soundexExpected) = $comps;
 
     if ($debug) {
       echo "$inputFileName:$ln [[$name $typeName $languageName]]\n";
@@ -63,20 +63,29 @@ function main($argc, $argv) {
     try {
       // TODO: Order shouldn't matter for any of these
       
-      $bmpmApproxActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), false);
+      $bmpmApproxActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), BMPM::MATCHING_APPROXIMATE);
       if ($bmpmApproxActual != $bmpmApproxExpected) {
         echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName approx]]\n[[expected]] $bmpmApproxExpected\n  [[actual]] $bmpmApproxActual\n";
         $fails++;
         beep();
       }
 
-      $bmpmExactActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), true);
+      $bmpmExactActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), BMPM::MATCHING_EXACT);
       if ($bmpmExactActual != $bmpmExactExpected) {
         echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName exact]]\n[[expected]] $bmpmExactExpected\n  [[actual]] $bmpmExactActual\n";
         $fails++;
         beep();
       }
 
+/*
+      $bmpmHebrewActual = BMPM::getPhoneticEncoding($name, BMPMTypeForName($typeName), BMPMLanguageForName($languageName), BMPM::MATCHING_HEBREW);
+      if ($bmpmHebrewActual != $bmpmHebrewExpected) {
+        echo "$inputFileName:" . $ln . " BMPM::getPhoneticEncoding failed: [[$name $typeName $languageName hebrew]]\n[[expected]] $bmpmHebrewExpected\n  [[actual]] $bmpmHebrewActual\n";
+        $fails++;
+        beep();
+      }
+*/
+      
       $soundexExpected = trim($soundexExpected);
       $soundexActual = BMPM::getDaitchMotokoffSoundex($name);
       if ($soundexExpected != $soundexActual) {
@@ -88,8 +97,7 @@ function main($argc, $argv) {
       echo "$inputFileName:$ln [[$name $typeName $languageName]]\n";
       echo $e->getMessage() . "\n";
       echo $e->getTraceAsString() . "\n";
-      $fails++;
-      beep();
+      return 1;
     }
 
     $ln++;

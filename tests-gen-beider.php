@@ -39,7 +39,7 @@ while (($line = fgets($handle)) !== false) {
 	// Currently don't understand expected results of multilingual tests ("spanish+german+polish+romanian")
 	if (count($languages) == 1) {
 		$languageName = $languages[0];
-		fputs($outputHandle, "$name\t$type\t$languageName\t$phoneticExact\t$phoneticApprox\t$soundex\n");
+		fputs($outputHandle, "$name\t$type\t$languageName\t$phoneticExact\t$phoneticApprox\t$phoneticHebrew\t$soundex\n");
 	}
 }
 

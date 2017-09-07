@@ -10,6 +10,9 @@ class BMPMAshkenazi extends BMPM {
 		include "ash/exactcommon.php";
 		$this->setExactCommon($exactCommon);
 		
+		include "ash/hebrewcommon.php";
+		$this->setHebrewCommon($hebrewCommon);
+
 		include "ash/languagenames.php";
 		$this->setLanguageNames($languages);
 		
